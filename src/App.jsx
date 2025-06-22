@@ -9,6 +9,7 @@ import GoleadoresEquipo from "./pages/GoleadoresEquipo";
 import GoleadoresPorCampeonato from "./pages/GoleadoresPorCampeonato.jsx";
 import Villanos from "./pages/Villanos.jsx";
 import Palmares from "./pages/Palmares.jsx";
+import Landing from "./pages/Landing.jsx";
 
 export default function App() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Pes_Data" element={<Home />} />
+          <Route path="/Pes_Data/" element={<Landing />} />
           <Route path="/equipo" element={<EstadisticasEquipo />} />
           <Route path="/campeonatos" element={<EstadisticasPorCampeonato />} />
           <Route path="/analisis" element={<Analisis />} />
