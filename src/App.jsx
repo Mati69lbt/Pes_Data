@@ -17,6 +17,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Pes_Data" element={<Home />} />
           <Route path="/equipo" element={<EstadisticasEquipo />} />
           <Route path="/campeonatos" element={<EstadisticasPorCampeonato />} />
           <Route path="/analisis" element={<Analisis />} />
@@ -27,6 +28,8 @@ export default function App() {
           />
           <Route path="/villanos" element={<Villanos />} />
           <Route path="/palmares" element={<Palmares />} />
+          {/* Catch-all por si la URL no existe */}
+          <Route path="*" element={<Home />} />
         </Routes>
       </div>
     </BrowserRouter>
