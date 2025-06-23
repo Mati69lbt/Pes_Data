@@ -114,9 +114,9 @@ export default function CampeonatosDesglozados() {
           return (
             <div key={torneo} className="mb-8">
               <div className="flex justify-center items-center gap-2 mb-1">
-              <h2 className="text-xl font-semibold mb-2 text-center underline">
-                {torneo}
-              </h2>
+                <h2 className="text-xl font-semibold mb-2 text-center underline">
+                  {torneo}
+                </h2>
                 <label className="text-sm">🏆 ¿Campeón?</label>
                 <input
                   type="checkbox"
@@ -124,10 +124,10 @@ export default function CampeonatosDesglozados() {
                   onChange={() => toggleCampeonatoGanado(torneo)}
                 />
               </div>
-              
-              <div className="overflow-x-auto mt-2 w-full">
-                <table className="text-[11px] md:text-sm lg:text-base border w-full">
-                  <thead className="bg-gray-100">
+
+              <div className="max-h-[70vh] overflow-auto border rounded">
+                <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
+                  <thead className="bg-green-200 sticky top-[-1px]  shadow-lg">
                     <tr>
                       <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                         Rival

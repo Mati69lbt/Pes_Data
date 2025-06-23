@@ -7,8 +7,10 @@ const saveStorage = (data) =>
 
 const ordenarLista = (arr) => [...arr].sort((a, b) => a.localeCompare(b));
 
-export function useAutoCompleteList(tipo) {
+export function useAutoCompleteList(tipo, rival = "") {
   const [list, setList] = useState([]);
+
+  
 
   useEffect(() => {
     if (tipo === "jugadoresBoca") {
@@ -27,16 +29,21 @@ export function useAutoCompleteList(tipo) {
       return;
     }
 
+    const storage = getStorage();
+
     if (tipo === "goleadoresRivales") {
-      const storage = getStorage();
-      const goles = storage.goleadoresRivales || [];
-      const ordenados = [...new Set(goles)].sort((a, b) => a.localeCompare(b));
-      setList(ordenados);
+      const todos = storage.goleadoresRivales || [];
+
+      const filtrados = rival
+        ? todos.filter((n) => n.toLowerCase().includes(rival.toLowerCase()))
+        : todos;
+
+      setList(ordenarLista([...new Set(filtrados)]));
       return;
     }
 
     // Resto: los que sí usan localStorage (rivales, goleadores rivales)
-    const storage = getStorage();
+   
     const lista = ordenarLista(storage[tipo] || []);
     setList(lista);
   }, [tipo]);

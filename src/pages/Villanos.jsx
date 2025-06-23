@@ -1,3 +1,4 @@
+//cspell: ignore Villanos Direccion 
 import { useEffect, useState } from "react";
 
 export default function Villanos() {
@@ -55,10 +56,10 @@ export default function Villanos() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="text-[12px] md:text-sm border mx-auto w-full">
-          <thead>
-            <tr className="bg-gray-100">
+      <div className="max-h-[70vh] overflow-auto border rounded">
+        <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
+          <thead className="bg-green-200 sticky top-[-1px] shadow-lg">
+            <tr>
               <th className="border px-2 py-1 text-left">Jugador - Club</th>
               <th className="border px-2 py-1 text-center">Goles</th>
               <th className="border px-2 py-1 text-center">⚽x2</th>
@@ -66,20 +67,27 @@ export default function Villanos() {
             </tr>
           </thead>
           <tbody>
-            {villanos.map(([nombre, stats]) => (
-              <tr key={nombre}>
-                <td className="border px-2 py-1 font-medium text-left">
-                  {nombre}
-                </td>
-                <td className="border px-2 py-1 text-center">{stats.total}</td>
-                <td className="border px-2 py-1 text-center">
-                  {stats.dobletes}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {stats.hatTricks}
-                </td>
-              </tr>
-            ))}
+            {villanos.map(([nombre, stats], index) => {
+              const isEven = index % 2 === 0;
+              const rowClass = isEven ? "bg-white" : "bg-gray-200";
+
+              return (
+                <tr key={nombre} className={rowClass}>
+                  <td className="border px-2 py-1 font-medium text-left">
+                    {nombre}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {stats.total}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {stats.dobletes}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {stats.hatTricks}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

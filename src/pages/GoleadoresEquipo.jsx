@@ -38,7 +38,6 @@ export default function GoleadoresEquipo() {
 
     setEstadisticas(sorted);
   };
-  
 
   useEffect(() => {
     if (Object.keys(resumenes).length > 0) {
@@ -50,12 +49,12 @@ export default function GoleadoresEquipo() {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partidos = Array.isArray(storage.partidos) ? storage.partidos : [];
     const resumen = {};
-  
+
     partidos.forEach((partido) => {
       const ambitos = ["general"];
       if (partido.esLocal) ambitos.push("local");
       else ambitos.push("visitante");
-  
+
       partido.jugadores.forEach((jugador) => {
         if (!resumen[jugador]) {
           resumen[jugador] = {
@@ -66,7 +65,7 @@ export default function GoleadoresEquipo() {
         }
         ambitos.forEach((amb) => resumen[jugador][amb].pj++);
       });
-  
+
       partido.goleadores.forEach(({ nombre, goles, etiqueta }) => {
         if (!resumen[nombre]) {
           resumen[nombre] = {
@@ -75,7 +74,7 @@ export default function GoleadoresEquipo() {
             visitante: { pj: 0, goles: 0, dobletes: 0, hatTricks: 0 },
           };
         }
-  
+
         ambitos.forEach((amb) => {
           resumen[nombre][amb].goles += goles;
           if (etiqueta === "Doblete") resumen[nombre][amb].dobletes++;
@@ -83,10 +82,9 @@ export default function GoleadoresEquipo() {
         });
       });
     });
-  
+
     setResumenes(resumen);
   }, []);
-  
 
   const promedio = (goles, pj) => (pj > 0 ? (goles / pj).toFixed(2) : "0.00");
 
@@ -120,8 +118,8 @@ export default function GoleadoresEquipo() {
             <option value="pj">PJ</option>
             <option value="goles">Goles</option>
             <option value="prom">Promedio</option>
-            <option value="dobletes">Dobletes</option> 
-            <option value="hatTricks">Hat-Tricks</option> 
+            <option value="dobletes">Dobletes</option>
+            <option value="hatTricks">Hat-Tricks</option>
           </select>
         </div>
         <div>
@@ -137,10 +135,10 @@ export default function GoleadoresEquipo() {
         </div>
       </div>
 
-      <div className="overflow-x-auto mt-2 w-full">
-        <table className="text-[11px] md:text-sm lg:text-base border w-full">
-          <thead>
-            <tr className="bg-gray-100">
+      <div className="max-h-[70vh] overflow-auto border rounded">
+        <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full ">
+          <thead className="bg-green-200 sticky top-[-1px]  shadow-lg border">
+            <tr className="bg-green-200 border">
               <th
                 rowSpan={2}
                 className="border px-2 py-1 text-center w-[90px] break-words"
@@ -157,7 +155,7 @@ export default function GoleadoresEquipo() {
                 Visitante
               </th>
             </tr>
-            <tr className="bg-gray-50">
+            <tr className="bg-green-200 ">
               {["PJ", "Goles", "Prom.", "⚽x2", "⚽x3"].map((t, i) => (
                 <th
                   key={`gen-${i}`}
@@ -185,39 +183,40 @@ export default function GoleadoresEquipo() {
             </tr>
           </thead>
           <tbody>
-            {estadisticas.map(([jugador, stats]) => (
-              <tr key={jugador}>
-                <td className="border px-2 py-1 font-semibold w-[90px] break-words">
-                  {jugador}
-                </td>
-                {["general", "local", "visitante"].map((amb) => (
-                  <React.Fragment key={`${jugador}-${amb}`}>
-                    <td className="border px-2 py-1 text-center">
-                      {stats[amb].pj}
-                    </td>
-                    <td className="border px-2 py-1 text-center">
-                      {stats[amb].goles}
-                    </td>
-                    <td className="border px-2 py-1 text-center">
-                      {stats[amb].pj > 0
-                        ? (stats[amb].goles / stats[amb].pj).toFixed(2)
-                        : "0.00"}
-                    </td>
-                    <td className="border px-2 py-1 text-center">
-                      {stats[amb].dobletes}
-                    </td>
-                    <td className="border px-2 py-1 text-center">
-                      {stats[amb].hatTricks}
-                    </td>
-                  </React.Fragment>
-                ))}
-              </tr>
-            ))}
+            {estadisticas.map(([jugador, stats], index) => {
+              const rowBg = index % 2 === 0 ? "bg-white" : "bg-gray-200";
+              return (
+                <tr key={jugador} className={rowBg}>
+                  <td className="border px-2 py-1 font-semibold w-[90px] break-words">
+                    {jugador}
+                  </td>
+                  {["general", "local", "visitante"].map((amb) => (
+                    <React.Fragment key={`${jugador}-${amb}`}>
+                      <td className="border px-2 py-1 text-center">
+                        {stats[amb].pj}
+                      </td>
+                      <td className="border px-2 py-1 text-center">
+                        {stats[amb].goles}
+                      </td>
+                      <td className="border px-2 py-1 text-center">
+                        {stats[amb].pj > 0
+                          ? (stats[amb].goles / stats[amb].pj).toFixed(2)
+                          : "0.00"}
+                      </td>
+                      <td className="border px-2 py-1 text-center">
+                        {stats[amb].dobletes}
+                      </td>
+                      <td className="border px-2 py-1 text-center">
+                        {stats[amb].hatTricks}
+                      </td>
+                    </React.Fragment>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </div>
   );
-
-  
 }

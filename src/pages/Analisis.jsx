@@ -1,3 +1,5 @@
+//cspell: ignore Campeonatos Desglozados Analisis Andrada Comparacion Resumenes Rossi Unicos Vacio anio resumenes rossi supercopa 
+
 import { useEffect, useState } from "react";
 
 export default function Analisis() {
@@ -104,21 +106,21 @@ export default function Analisis() {
 
     return (
       <div key={torneo} className="mb-4">
-        <h3 className="font-bold text-sm md:text-base lg:text-lg mb-1 text-center">
+        <h3 className="font-bold text-sm md:text-base lg:text-lg mb-1 text-center underline">
           {torneo}
         </h3>
         <table className="text-[10px] md:text-xs lg:text-sm border mx-auto w-full max-w-5xl">
-          <thead>
+          <thead className="bg-green-200">
             <tr>
-              <th className="border px-2">Rossi</th>
+              <th className="border px-2 text-right">Rossi</th>
               <th className="border px-2">Pj</th>
               <th className="border px-2">G</th>
               <th className="border px-2">E</th>
               <th className="border px-2">P</th>
               <th className="border px-2">GF</th>
               <th className="border px-2">GC</th>
-              <th className="border px-2"></th>
-              <th className="border px-2">Andrada</th>
+              <th className="border px-2 bg-white"></th>
+              <th className="border px-2 text-right">Andrada</th>
               <th className="border px-2">Pj</th>
               <th className="border px-2">G</th>
               <th className="border px-2">E</th>
@@ -133,7 +135,7 @@ export default function Analisis() {
                 key={tipo}
                 className={i % 2 === 0 ? "bg-white" : "bg-gray-100"}
               >
-                <td className="border px-2 text-right font-semibold capitalize">
+                <td className="border px-2 text-right font-semibold capitalize ">
                   {tipo}
                 </td>
                 {renderFila(r[tipo])}
@@ -177,21 +179,21 @@ export default function Analisis() {
 
       {/* Tabla general de totales */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold mb-2 text-center">
+        <h2 className="text-lg font-bold mb-2 text-center underline">
           Totales Generales
         </h2>
         <table className="text-[10px] md:text-xs lg:text-sm border mx-auto w-full max-w-5xl">
-          <thead>
+          <thead className="">
             <tr>
-              <th className="border px-2 text-center" colSpan={7}>
+              <th className="border px-2 text-center bg-green-200" colSpan={7}>
                 Rossi
               </th>
-              <th className="px-2"></th>
-              <th className="border px-2 text-center" colSpan={7}>
+              <th className="px-2 bg-white"></th>
+              <th className="border px-2 text-center bg-green-200" colSpan={7}>
                 Andrada
               </th>
             </tr>
-            <tr>
+            <tr className="bg-green-200">
               <th className="border px-2 text-right">Tipo</th>
               <th className="border px-2 text-center">Pj</th>
               <th className="border px-2 text-center">G</th>
@@ -199,7 +201,7 @@ export default function Analisis() {
               <th className="border px-2 text-center">P</th>
               <th className="border px-2 text-center">GF</th>
               <th className="border px-2 text-center">GC</th>
-              <th className="px-2"></th>
+              <th className="px-2 bg-white"></th>
               <th className="border px-2 text-right">Tipo</th>
               <th className="border px-2 text-center">Pj</th>
               <th className="border px-2 text-center">G</th>

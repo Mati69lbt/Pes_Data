@@ -2,6 +2,10 @@ import { toast } from "react-toastify";
 import { equiposTitulares } from "./equipos";
 import { formatoEtiqueta } from "./formatoEtiqueta";
 
+function normalizarNombreRival(nombre) {
+  return nombre.trim().replace(/\s+/g, " ");
+}
+
 export function guardarPartido(
   state,
   agregarSugerenciaRivalNombre,
@@ -43,7 +47,7 @@ export function guardarPartido(
   const contador = storage.contadorGoleadoresRivales || {};
 
   state.goleadoresRival.forEach((g) => {
-    const clave = `${g.nombre} - ${state.rival}`;
+    const clave = `${g.nombre} - ${normalizarNombreRival(state.rival)}`;
     const goles = parseInt(g.goles);
 
     // Sumar a la lista de autocompletado si no está
@@ -93,10 +97,6 @@ export function guardarPartido(
 
   const ultimaFecha = nuevoPartido.fecha;
 
-  dispatch({
-    type: "REINICIAR_FORM",
-    payload: { fecha: ultimaFecha },
-  });
 
   dispatch({
     type: "REINICIAR_FORM",

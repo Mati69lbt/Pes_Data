@@ -1,16 +1,18 @@
+//cspell: ignore rivalNombre rivalGoles goleadorRivalNombre goleadorRivalGoles goleadorNombre goleadorGoles Andrada Completá Confirmacion Rossi Supercopa andrada rossi
 import { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { initialState, partidoReducer } from "../context/partidoReducer";
 import { formatoEtiqueta } from "../utils/formatoEtiqueta";
 import { useAutoCompleteList } from "../hooks/useAutoCompleteList";
 import { guardarPartido } from "../utils/guardarPartido";
+import { normalizarNombreRival } from "../utils/normalizarNombreRival";
 
 export default function Home() {
   const [state, dispatch] = useReducer(partidoReducer, initialState);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
   const [sugerenciasGoleadoresRivales, agregarSugerenciaGoleadorRival] =
-    useAutoCompleteList("goleadoresRivales");
+    useAutoCompleteList("goleadoresRivales", state.rival);
   const [sugerenciasRivales, agregarSugerenciaRivalNombre] =
     useAutoCompleteList("rivalesJugados");
   const [sugerenciasGoleadoresBoca, agregarSugerenciaGoleadorBoca] =
@@ -50,10 +52,12 @@ export default function Home() {
   };
 
   const agregarRival = () => {
-    const nombre = state.goleadorRivalNombre.trim();
+    let nombre = state.goleadorRivalNombre.trim();
     const goles = parseInt(state.goleadorRivalGoles, 10);
 
     if (!nombre || isNaN(goles)) return;
+
+    nombre = normalizarNombreRival(nombre); // <- ✅ APLICAR NORMALIZACIÓN
 
     const etiqueta =
       goles === 2
@@ -93,13 +97,16 @@ export default function Home() {
       ...contador,
       [nombre]: nuevosDatos,
     };
+    // Evitar duplicados en la lista de sugerencias
+    const listaActual = new Set(storage.goleadoresRivales || []);
+    listaActual.add(nombre);
 
     localStorage.setItem(
       "pesData",
       JSON.stringify({
         ...storage,
         contadorGoleadoresRivales: nuevoContador,
-        goleadoresRivales: [...(storage.goleadoresRivales || []), nombre],
+        goleadoresRivales: Array.from(listaActual),
       })
     );
 
@@ -109,7 +116,6 @@ export default function Home() {
       payload: { nombre, goles, etiqueta },
     });
   };
-  
   
   
   const confirmarGuardar = () => {

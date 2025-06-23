@@ -68,13 +68,15 @@ export default function GoleadoresPorCampeonato() {
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">🏆 Goleadores por Campeonato</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        🏆 Goleadores por Campeonato
+      </h1>
       {resumenPorCampeonato.map(([campeonato, jugadores]) => (
         <div key={campeonato} className="mb-8">
           <h2 className="text-lg font-semibold mb-2">{campeonato}</h2>
           <table className="text-[12px] md:text-sm border w-full">
-            <thead>
-              <tr className="bg-gray-100">
+            <thead className="bg-green-200">
+              <tr>
                 <th className="border px-2 py-1 text-center">Jugador</th>
                 <th className="border px-2 py-1 text-center">PJ</th>
                 <th className="border px-2 py-1 text-center">Goles</th>
@@ -84,16 +86,27 @@ export default function GoleadoresPorCampeonato() {
               </tr>
             </thead>
             <tbody>
-              {jugadores.map(([nombre, stats]) => (
-                <tr key={nombre}>
-                  <td className="border px-2 py-1">{nombre}</td>
-                  <td className="border px-2 py-1 text-center">{stats.pj}</td>
-                  <td className="border px-2 py-1 text-center">{stats.goles}</td>
-                  <td className="border px-2 py-1 text-center">{promedio(stats.goles, stats.pj)}</td>
-                  <td className="border px-2 py-1 text-center">{stats.dobletes}</td>
-                  <td className="border px-2 py-1 text-center">{stats.hatTricks}</td>
-                </tr>
-              ))}
+              {jugadores.map(([nombre, stats], index) => {
+                const rowBg = index % 2 === 0 ? "bg-white" : "bg-gray-200";
+                return (
+                  <tr key={nombre} className={rowBg}>
+                    <td className="border px-2 py-1">{nombre}</td>
+                    <td className="border px-2 py-1 text-center">{stats.pj}</td>
+                    <td className="border px-2 py-1 text-center">
+                      {stats.goles}
+                    </td>
+                    <td className="border px-2 py-1 text-center">
+                      {promedio(stats.goles, stats.pj)}
+                    </td>
+                    <td className="border px-2 py-1 text-center">
+                      {stats.dobletes}
+                    </td>
+                    <td className="border px-2 py-1 text-center">
+                      {stats.hatTricks}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

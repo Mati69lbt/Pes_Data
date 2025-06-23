@@ -9,8 +9,6 @@ export default function EstadisticasEquipo() {
   const [ordenCampo, setOrdenCampo] = useState("rival");
   const [ordenDireccion, setOrdenDireccion] = useState("asc");
 
-  
-
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const lista = storage.partidos || [];
@@ -132,9 +130,9 @@ export default function EstadisticasEquipo() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="max-h-[70vh] overflow-auto border rounded">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-green-200">
+          <thead className="bg-green-200 sticky top-[-1px] shadow-lg">
             <tr>
               <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                 Rival
