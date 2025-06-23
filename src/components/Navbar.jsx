@@ -1,10 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 export default function Navbar() {
   const location = useLocation();
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [forzarHamburguesa, setForzarHamburguesa] = useState(false);
+
+  useEffect(() => {
+    const evaluarPantalla = () => {
+      const ancho = window.innerWidth;
+      const alto = window.innerHeight;
+      setForzarHamburguesa(ancho < 933 || alto < 431);
+    };
+
+    evaluarPantalla(); // al cargar
+    window.addEventListener("resize", evaluarPantalla);
+    return () => window.removeEventListener("resize", evaluarPantalla);
+  }, []);
 
   const linkClass = (path) =>
     `block px-4 py-2 rounded hover:bg-blue-100 transition ${
@@ -44,97 +57,64 @@ export default function Navbar() {
     );
   };
 
+  const links = [
+    { path: "/", label: "🏠 Inicio" },
+    { path: "/equipo", label: "📊 Equipo" },
+    { path: "/campeonatos", label: "🏆 Campeonatos" },
+    { path: "/analisis", label: "📈 Análisis" },
+    { path: "/goleadores", label: "⚽ Goleadores" },
+    { path: "/goleadoresxcampeonato", label: "⚽ GxC" },
+    { path: "/villanos", label: "😈 Villanos" },
+    { path: "/palmares", label: "👑 Palmares" },
+  ];
+
   return (
     <nav className="bg-white shadow-md w-full sticky top-0 z-10">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <span className="text-xl font-bold text-blue-600 whitespace-nowrap">
-            ⚽ pesData
-          </span>
-          {/* Menú links en escritorio */}
-          <div className="hidden md:flex space-x-2 text-sm">
+        <span className="text-xl font-bold text-blue-600 whitespace-nowrap">
+          ⚽ pesData
+        </span>
+
+        {/* LINKS EN ESCRITORIO SOLO SI NO SE FUERZA EL MENÚ HAMBURGUESA */}
+        <div
+          className={`space-x-2 text-sm ${
+            forzarHamburguesa ? "hidden" : "hidden md:flex"
+          }`}
+        >
+          {links.map(({ path, label }) => (
             <Link
-              to="/"
-              className={`${linkClass("/")} flex items-center gap-1`}
+              key={path}
+              to={path}
+              className={`${linkClass(path)} flex items-center gap-1`}
             >
-              🏠 Inicio
+              {label}
             </Link>
-            <Link
-              to="/equipo"
-              className={`${linkClass("/equipo")} flex items-center gap-1`}
-            >
-              📊 Equipo
-            </Link>
-            <Link
-              to="/campeonatos"
-              className={`${linkClass("/campeonatos")} flex items-center gap-1`}
-            >
-              🏆 Campeonatos
-            </Link>
-            <Link
-              to="/analisis"
-              className={`${linkClass("/analisis")} flex items-center gap-1`}
-            >
-              📈 Análisis
-            </Link>
-            <Link
-              to="/goleadores"
-              className={`${linkClass("/goleadores")} flex items-center gap-1`}
-            >
-              ⚽ Goleadores
-            </Link>
-            <Link
-              to="/goleadoresxcampeonato"
-              className={`${linkClass(
-                "/goleadoresxcampeonato"
-              )} flex items-center gap-1`}
-            >
-              ⚽ GxC
-            </Link>
-            <Link
-              to="/villanos"
-              className={`${linkClass("/villanos")} flex items-center gap-1`}
-            >
-              😈 Villanos
-            </Link>
-            <Link
-              to="/palmares"
-              className={`${linkClass("/palmares")} flex items-center gap-1`}
-            >
-              👑 Palmares
-            </Link>
-            <button
-              onClick={mostrarConfirmacionReset}
-              className="text-red-600 hover:underline flex items-center gap-1"
-            >
-              🗑️ Reiniciar
-            </button>
-          </div>
+          ))}
+          <button
+            onClick={mostrarConfirmacionReset}
+            className="text-red-600 hover:underline flex items-center gap-1"
+          >
+            🗑️ Reiniciar
+          </button>
         </div>
 
-        {/* Botón menú móvil */}
-        <button
-          className="md:hidden text-gray-700 text-xl"
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          aria-label="Toggle menu"
-        >
-          ☰
-        </button>
+        {/* BOTÓN HAMBURGUESA SI SE FUERZA */}
+        {forzarHamburguesa && (
+          <button
+            type="button"
+            className="text-gray-700 text-2xl"
+            onClick={() => setMenuAbierto(!menuAbierto)}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+        )}
       </div>
 
-      {/* Menú desplegable en móvil */}
-      {menuAbierto && (
-        <div className="md:hidden px-4 pb-4 space-y-1 text-sm">
-          {[
-            { path: "/", label: "🏠 Inicio" },
-            { path: "/equipo", label: "📊 Equipo" },
-            { path: "/campeonatos", label: "🏆 Campeonatos" },
-            { path: "/analisis", label: "📈 Análisis" },
-            { path: "/goleadores", label: "⚽ Goleadores" },
-            { path: "/goleadoresxcampeonato", label: "⚽ GxC" },
-            { path: "/villanos", label: "😈 Villanos" },
-            { path: "/palmares", label: "👑 Palmares" },
-          ].map(({ path, label }) => (
+      {/* MENÚ DESPLEGABLE SI ESTÁ ABIERTO */}
+      {menuAbierto && forzarHamburguesa && (
+        <div className="px-4 pb-4 space-y-1 bg-white shadow-inner text-sm">
+          {links.map(({ path, label }) => (
             <Link
               key={path}
               to={path}
@@ -144,7 +124,6 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-
           <button
             onClick={() => {
               setMenuAbierto(false);

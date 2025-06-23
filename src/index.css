@@ -12,3 +12,16 @@
   border-radius: 8px;
   padding: 16px;
 }
+
+
+@layer utilities {
+  @media (max-height: 430px) {
+    .force-hamburguer {
+      display: none !important;
+    }
+
+    .force-show-hamburguer {
+      display: flex !important;
+    }
+  }
+}

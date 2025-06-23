@@ -1,4 +1,4 @@
-//cspell: ignore Campeonatos Ambito Estadisticas
+//cspell: ignore Campeonatos Ambito Estadisticas resumenes Desglozados Anio ambito
 import { useEffect, useState } from "react";
 import CampeonatosDesglozados from "./CampeonatosDesglozados";
 
@@ -11,7 +11,7 @@ export default function EstadisticasPorCampeonato() {
     const resumen = {};
 
     partidos.forEach((p) => {
-      // 🛠️ MODIFICADO: lógica para calcular temporada correctamente
+      
       const fecha = new Date(p.fecha);
       const mes = fecha.getMonth() + 1;
       const anio = fecha.getFullYear();
@@ -49,7 +49,7 @@ export default function EstadisticasPorCampeonato() {
       resumen[clave].gf += gf;
       resumen[clave].gc += gc;
 
-      // Local / Visitante
+      
       const ambito = esLocal ? resumen[clave].local : resumen[clave].visitante;
       ambito.pj++;
       ambito[resultado]++;
@@ -65,10 +65,16 @@ export default function EstadisticasPorCampeonato() {
     const extraerAnio = (str) => {
       const match = str.match(/(\d{4})(?:-(\d{4}))?$/);
       if (!match) return 0;
-      return parseInt(match[2] || match[1]); // Si hay temporada, usa el segundo año
+      return parseInt(match[2] || match[1]);
     };
-    return extraerAnio(b) - extraerAnio(a); // Orden descendente
+    return extraerAnio(b) - extraerAnio(a); 
   });
+
+  const normalizarNombre = (nombre) => {
+    return nombre
+      .replace(/Campeonato Argentino/i, "Liga Argentina")
+      .replace(/Campeonato Nacional/i, "Liga Nacional"); 
+  };
 
   return (
     <div className="p-4 max-w-screen-2xl mx-auto">
@@ -78,9 +84,9 @@ export default function EstadisticasPorCampeonato() {
 
       <div className="overflow-x-auto w-full max-w-full">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-gray-100">
+          <thead className="bg-green-100">
             <tr>
-              <th className="border px-2 py-1 text-left">Campeonato</th>
+              <th className="border px-2 py-1 text-center">Campeonato</th>
               <th className="border px-2 py-1 text-center">PJ</th>
               <th className="border px-2 py-1 text-center">G</th>
               <th className="border px-2 py-1 text-center">E</th>
@@ -103,73 +109,73 @@ export default function EstadisticasPorCampeonato() {
             </tr>
           </thead>
           <tbody>
-            {clavesOrdenadas.map((clave) => (
-              <tr key={clave}>
-                <td className="border px-2 py-1 font-semibold text-left">
-                  {clave}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].pj}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].g}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].e}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].p}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].gf}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].gc}
-                </td>
+            {clavesOrdenadas.map((clave, index) => {
+             const isEven = index % 2 === 0;
+             const rowBg = isEven ? "bg-white" : "bg-gray-200";
+             const localBg = isEven ? "bg-green-200" : "bg-gray-200";
 
-                {/* Nuevas celdas */}
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.pj || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.g || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.e || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.p || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.gf || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].local?.gc || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.pj || 0}
-                </td>
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.g || 0}
-                </td>
-
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.e || 0}
-                </td>
-
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.p || 0}
-                </td>
-
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.gf || 0}
-                </td>
-
-                <td className="border px-2 py-1 text-center">
-                  {resumenes[clave].visitante?.gc || 0}
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr key={clave} className={rowBg}>
+                  <td className="border px-2 py-1 font-semibold text-left">
+                    {normalizarNombre(clave)}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].pj}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].g}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].e}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].p}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].gf}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].gc}
+                  </td>           
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.pj || 0}
+                  </td>
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.g || 0}
+                  </td>
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.e || 0}
+                  </td>
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.p || 0}
+                  </td>
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.gf || 0}
+                  </td>
+                  <td className={`border px-2 py-1 text-center ${localBg}`}>
+                    {resumenes[clave].local?.gc || 0}
+                  </td>                
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.pj || 0}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.g || 0}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.e || 0}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.p || 0}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.gf || 0}
+                  </td>
+                  <td className="border px-2 py-1 text-center">
+                    {resumenes[clave].visitante?.gc || 0}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

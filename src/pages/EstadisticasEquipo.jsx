@@ -134,9 +134,9 @@ export default function EstadisticasEquipo() {
 
       <div className="overflow-x-auto">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-gray-100">
+          <thead className="bg-green-200">
             <tr>
-              <th className="border px-2 py-1 text-left w-[65px] break-words text-xs font-medium">
+              <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                 Rival
               </th>
               {["General", "Local", "Visitante", "Rossi", "Andrada"].map(
@@ -152,28 +152,32 @@ export default function EstadisticasEquipo() {
             </tr>
           </thead>
           <tbody>
-            {estadisticas.map(([rival, stats]) => (
-              <tr key={rival}>
-                <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[65px]">
-                  {rival}
-                </td>
-                <td className="border px-2 py-1 whitespace-pre-line text-left align-top ">
-                  {formatearResumen(stats.general)}
-                </td>
-                <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                  {formatearResumen(stats.local)}
-                </td>
-                <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                  {formatearResumen(stats.visitante)}
-                </td>
-                <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                  {formatearResumen(stats.rossi)}
-                </td>
-                <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                  {formatearResumen(stats.andrada)}
-                </td>
-              </tr>
-            ))}
+            {estadisticas.map(([rival, stats], index) => {
+              const rowBg = index % 2 === 0 ? "bg-white" : "bg-gray-200";
+
+              return (
+                <tr key={rival} className={rowBg}>
+                  <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[65px]">
+                    {rival}
+                  </td>
+                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                    {formatearResumen(stats.general)}
+                  </td>
+                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                    {formatearResumen(stats.local)}
+                  </td>
+                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                    {formatearResumen(stats.visitante)}
+                  </td>
+                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                    {formatearResumen(stats.rossi)}
+                  </td>
+                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                    {formatearResumen(stats.andrada)}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

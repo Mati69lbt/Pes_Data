@@ -1,5 +1,5 @@
 // src/App.jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import EstadisticasEquipo from "./pages/EstadisticasEquipo";
@@ -13,7 +13,7 @@ import Landing from "./pages/Landing.jsx";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen bg-gray-100 text-gray-800 font-sans">
         <Navbar />
         <Routes>
@@ -33,6 +33,6 @@ export default function App() {
           <Route path="*" element={<Home />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

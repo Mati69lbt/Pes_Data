@@ -1,4 +1,4 @@
-//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion
+//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion Anio Desglozados anio supercopa
 import { useEffect, useState } from "react";
 
 export default function CampeonatosDesglozados() {
@@ -114,22 +114,22 @@ export default function CampeonatosDesglozados() {
           return (
             <div key={torneo} className="mb-8">
               <div className="flex justify-center items-center gap-2 mb-1">
+              <h2 className="text-xl font-semibold mb-2 text-center underline">
+                {torneo}
+              </h2>
+                <label className="text-sm">🏆 ¿Campeón?</label>
                 <input
                   type="checkbox"
                   checked={campeonatosGanados.has(torneo)}
                   onChange={() => toggleCampeonatoGanado(torneo)}
                 />
-                <label className="text-sm">🏆 ¿Campeón?</label>
               </div>
-              <h2 className="text-xl font-semibold mb-2 text-center underline">
-                {torneo}
-              </h2>
-              {/* TABLA DETALLADA POR RIVAL */}
+              
               <div className="overflow-x-auto mt-2 w-full">
                 <table className="text-[11px] md:text-sm lg:text-base border w-full">
                   <thead className="bg-gray-100">
                     <tr>
-                      <th className="border px-2 py-1 text-left w-[50px] break-words text-xs font-medium">
+                      <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                         Rival
                       </th>
                       {[
