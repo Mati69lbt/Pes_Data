@@ -1,5 +1,7 @@
+// cspell: ignore equiposTitulares, suplentesDisponibles, formatearNombreGoleador andrada rossi unicos
 import { useState, useEffect } from "react";
 import { equiposTitulares, suplentesDisponibles } from "../utils/equipos";
+import { formatearNombreGoleador } from "../utils/formato";
 
 const getStorage = () => JSON.parse(localStorage.getItem("pesData") || "{}");
 const saveStorage = (data) =>
@@ -14,7 +16,7 @@ export function useAutoCompleteList(tipo, rival = "") {
 
   useEffect(() => {
     if (tipo === "jugadoresBoca") {
-      // Combinar titulares y suplentes (sin duplicados)
+      
       const todos = new Set([
         ...equiposTitulares.rossi,
         ...equiposTitulares.andrada,
@@ -24,26 +26,35 @@ export function useAutoCompleteList(tipo, rival = "") {
       return;
     }
 
-    if (tipo === "suplentes") {
-      setList(ordenarLista([...suplentesDisponibles]));
-      return;
-    }
-
     const storage = getStorage();
 
     if (tipo === "goleadoresRivales") {
-      const todos = storage.goleadoresRivales || [];
+      const partidos = storage.partidos || [];
+      
+
+      const nombres = partidos.flatMap(
+        (p) =>
+          p.rivales?.map((r) => {
+            const nombreLimpio = formatearNombreGoleador(r.nombre, p.rival);
+            return `${nombreLimpio} - ${p.rival}`;
+          }) || []
+      );
+      
+
+      const unicos = [...new Set(nombres)];
+      
 
       const filtrados = rival
-        ? todos.filter((n) => n.toLowerCase().includes(rival.toLowerCase()))
-        : todos;
+        ? unicos.filter((n) => n.toLowerCase().includes(rival.toLowerCase()))
+        : unicos;
+      
 
-      setList(ordenarLista([...new Set(filtrados)]));
+      setList(ordenarLista(filtrados));
       return;
     }
 
     // Resto: los que sí usan localStorage (rivales, goleadores rivales)
-   
+
     const lista = ordenarLista(storage[tipo] || []);
     setList(lista);
   }, [tipo]);

@@ -1,3 +1,4 @@
+// cspell: ignore hamburguesa forzarHamburguesa Confirmacion analisis goleadoresxcampeonato Ambito Direccion Estadisticas Resumenes ambitos estadisticas resumenes
 import React, { useEffect, useState } from "react";
 
 export default function GoleadoresEquipo() {
@@ -50,12 +51,14 @@ export default function GoleadoresEquipo() {
     const partidos = Array.isArray(storage.partidos) ? storage.partidos : [];
     const resumen = {};
 
+    console.log("Partidos cargados:", partidos);
+
     partidos.forEach((partido) => {
       const ambitos = ["general"];
       if (partido.esLocal) ambitos.push("local");
       else ambitos.push("visitante");
 
-      partido.jugadores.forEach((jugador) => {
+      (partido.jugadores || []).forEach((jugador) => {
         if (!resumen[jugador]) {
           resumen[jugador] = {
             general: { pj: 0, goles: 0, dobletes: 0, hatTricks: 0 },
@@ -66,7 +69,7 @@ export default function GoleadoresEquipo() {
         ambitos.forEach((amb) => resumen[jugador][amb].pj++);
       });
 
-      partido.goleadores.forEach(({ nombre, goles, etiqueta }) => {
+      (partido.goleadores || []).forEach(({ nombre, goles, etiqueta }) => {
         if (!resumen[nombre]) {
           resumen[nombre] = {
             general: { pj: 0, goles: 0, dobletes: 0, hatTricks: 0 },
@@ -137,8 +140,8 @@ export default function GoleadoresEquipo() {
 
       <div className="max-h-[70vh] overflow-auto border rounded">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full ">
-          <thead className="bg-green-200 sticky top-[-1px]  shadow-lg border">
-            <tr className="bg-green-200 border">
+          <thead className="bg-blue-200 sticky top-[-1px]  shadow-lg border">
+            <tr className="bg-blue-200 border">
               <th
                 rowSpan={2}
                 className="border px-2 py-1 text-center w-[90px] break-words"
@@ -155,7 +158,7 @@ export default function GoleadoresEquipo() {
                 Visitante
               </th>
             </tr>
-            <tr className="bg-green-200 ">
+            <tr className="bg-blue-200 ">
               {["PJ", "Goles", "Prom.", "⚽x2", "⚽x3"].map((t, i) => (
                 <th
                   key={`gen-${i}`}

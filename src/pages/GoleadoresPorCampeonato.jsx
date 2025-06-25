@@ -1,3 +1,4 @@
+// cspell: ignore goleadoresxcampeonato anio
 import React, { useEffect, useState } from "react";
 
 export default function GoleadoresPorCampeonato() {
@@ -9,7 +10,7 @@ export default function GoleadoresPorCampeonato() {
     const resumen = {};
 
     partidos.forEach((partido) => {
-      const { torneo, fecha, goleadores, jugadores } = partido;
+      const { torneo, fecha, goleadores = [], jugadores = [] } = partido;
       const year = new Date(fecha).getFullYear();
       const key = `${torneo} ${year}`;
 
@@ -33,7 +34,7 @@ export default function GoleadoresPorCampeonato() {
 
     // Contar PJ solo para jugadores que hicieron goles
     partidos.forEach((partido) => {
-      const { torneo, fecha, jugadores, goleadores } = partido;
+      const { torneo, fecha, jugadores = [], goleadores = [] } = partido;
       const year = new Date(fecha).getFullYear();
       const key = `${torneo} ${year}`;
       const goleadoresNombres = goleadores.map((g) => g.nombre);
@@ -52,17 +53,18 @@ export default function GoleadoresPorCampeonato() {
       .sort((a, b) => {
         const anioA = parseInt(a[0].split(" ").pop());
         const anioB = parseInt(b[0].split(" ").pop());
-        return anioB - anioA; // descendente
+        return anioB - anioA;
       })
       .map(([campeonato, jugadores]) => [
         campeonato,
         Object.entries(jugadores)
           .filter(([, stats]) => stats.goles > 0)
-          .sort(([, a], [, b]) => b.goles - a.goles), // ordenar jugadores por goles descendente
+          .sort(([, a], [, b]) => b.goles - a.goles),
       ]);
 
     setResumenPorCampeonato(ordenado);
   }, []);
+  
 
   const promedio = (g, pj) => (pj > 0 ? (g / pj).toFixed(2) : "0.00");
 
@@ -75,7 +77,7 @@ export default function GoleadoresPorCampeonato() {
         <div key={campeonato} className="mb-8">
           <h2 className="text-lg font-semibold mb-2">{campeonato}</h2>
           <table className="text-[12px] md:text-sm border w-full">
-            <thead className="bg-green-200">
+            <thead className="bg-blue-200">
               <tr>
                 <th className="border px-2 py-1 text-center">Jugador</th>
                 <th className="border px-2 py-1 text-center">PJ</th>

@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+// cspell: ignore hamburguesa forzarHamburguesa Confirmacion analisis goleadoresxcampeonato CONFIRMACION
 
 export const initialState = {
   fecha: "",
@@ -64,7 +64,7 @@ export function partidoReducer(state, action) {
       return { ...state, goleadoresBoca: nuevosGoleadores };
     case "ADD_SUPLENTE":
       if (
-        state.suplentes.length >= 3 ||
+        state.suplentes.length >= 10 ||
         !action.payload ||
         state.suplentes.includes(action.payload)
       )

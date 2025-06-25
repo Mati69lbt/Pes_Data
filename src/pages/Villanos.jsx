@@ -8,9 +8,44 @@ export default function Villanos() {
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
-    const partidos = storage.contadorGoleadoresRivales || {};
+    const partidos = Array.isArray(storage.partidos) ? storage.partidos : [];
 
-    const ordenados = Object.entries(partidos).sort((a, b) => {
+    const contador = {};
+
+    partidos.forEach((partido) => {
+      const { rivales = [], rival } = partido;
+
+      rivales.forEach(({ nombre, goles }) => {
+        if (!nombre || goles == null) return;
+
+        // Asegura el formato: "Jugador - Equipo"
+        const clave = nombre.includes("-")
+          ? nombre.trim()
+          : `${nombre} - ${rival}`;
+
+        if (!contador[clave]) {
+          contador[clave] = {
+            total: 0,
+            dobletes: 0,
+            hatTricks: 0,
+            pokers: 0,
+            manitos: 0,
+            dobleHatTricks: 0,
+          };
+        }
+
+        const golesInt = parseInt(goles);
+
+        contador[clave].total += golesInt;
+        if (golesInt === 2) contador[clave].dobletes += 1;
+        else if (golesInt === 3) contador[clave].hatTricks += 1;
+        else if (golesInt === 4) contador[clave].pokers += 1;
+        else if (golesInt === 5) contador[clave].manitos += 1;
+        else if (golesInt === 6) contador[clave].dobleHatTricks += 1;
+      });
+    });
+
+    const ordenados = Object.entries(contador).sort((a, b) => {
       if (ordenCampo === "nombre") {
         return ordenDireccion === "asc"
           ? a[0].localeCompare(b[0])
@@ -24,6 +59,7 @@ export default function Villanos() {
 
     setVillanos(ordenados);
   }, [ordenCampo, ordenDireccion]);
+  
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
@@ -58,7 +94,7 @@ export default function Villanos() {
 
       <div className="max-h-[70vh] overflow-auto border rounded">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-green-200 sticky top-[-1px] shadow-lg">
+          <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
             <tr>
               <th className="border px-2 py-1 text-left">Jugador - Club</th>
               <th className="border px-2 py-1 text-center">Goles</th>

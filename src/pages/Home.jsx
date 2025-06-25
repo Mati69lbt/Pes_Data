@@ -6,19 +6,27 @@ import { formatoEtiqueta } from "../utils/formatoEtiqueta";
 import { useAutoCompleteList } from "../hooks/useAutoCompleteList";
 import { guardarPartido } from "../utils/guardarPartido";
 import { normalizarNombreRival } from "../utils/normalizarNombreRival";
+import { obtenerUltimaFechaPartido } from "../utils/fecha";
 
 export default function Home() {
   const [state, dispatch] = useReducer(partidoReducer, initialState);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
   const [sugerenciasGoleadoresRivales, agregarSugerenciaGoleadorRival] =
-    useAutoCompleteList("goleadoresRivales", state.rival);
+    useAutoCompleteList("goleadoresRivales");
   const [sugerenciasRivales, agregarSugerenciaRivalNombre] =
     useAutoCompleteList("rivalesJugados");
   const [sugerenciasGoleadoresBoca, agregarSugerenciaGoleadorBoca] =
     useAutoCompleteList("goleadoresBoca");
   const [sugerenciasJugadoresBoca] = useAutoCompleteList("jugadoresBoca");
   const [sugerenciasSuplentes] = useAutoCompleteList("suplentes");
+
+  useEffect(() => {
+    const ultimaFecha = obtenerUltimaFechaPartido();
+    if (ultimaFecha) {
+      dispatch({ type: "SET_FECHA", payload: ultimaFecha });
+    }
+  }, []);
 
   const handleGuardar = () => {
     const { fecha, rival, torneo, equipo } = state;
@@ -35,7 +43,7 @@ export default function Home() {
       type: "ACTUALIZAR_CAMPO",
       campo: name,
       valor: type === "checkbox" ? checked : value,
-    });  
+    });
   };
 
   const agregarGoleador = () => {
@@ -57,7 +65,8 @@ export default function Home() {
 
     if (!nombre || isNaN(goles)) return;
 
-    nombre = normalizarNombreRival(nombre); // <- ✅ APLICAR NORMALIZACIÓN
+    // Normalizamos y armamos el nombre con el rival
+    nombre = `${normalizarNombreRival(nombre)} - ${state.rival}`;
 
     const etiqueta =
       goles === 2
@@ -72,52 +81,23 @@ export default function Home() {
         ? "dobleHatTricks"
         : null;
 
-    // Guardar en LocalStorage
-    const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
-    const contador = storage.contadorGoleadoresRivales || {};
-
-    const datosPrevios = contador[nombre] || {
-      total: 0,
-      dobletes: 0,
-      hatTricks: 0,
-      pokers: 0,
-      manitos: 0,
-      dobleHatTricks: 0,
-    };
-
-    const nuevosDatos = {
-      ...datosPrevios,
-      total: datosPrevios.total + goles,
-      ...(etiqueta && {
-        [etiqueta]: (datosPrevios[etiqueta] || 0) + 1,
-      }),
-    };
-
-    const nuevoContador = {
-      ...contador,
-      [nombre]: nuevosDatos,
-    };
-    // Evitar duplicados en la lista de sugerencias
-    const listaActual = new Set(storage.goleadoresRivales || []);
-    listaActual.add(nombre);
-
-    localStorage.setItem(
-      "pesData",
-      JSON.stringify({
-        ...storage,
-        contadorGoleadoresRivales: nuevoContador,
-        goleadoresRivales: Array.from(listaActual),
-      })
-    );
-
-    // Actualizar el estado
+    // Solo actualizamos el state
     dispatch({
       type: "ADD_GOLEADOR_RIVAL",
       payload: { nombre, goles, etiqueta },
     });
   };
-  
-  
+
+  const handleInputSeleccionado = (e) => {
+    const valor = e.target.value;
+    const coincidencia = sugerenciasGoleadoresRivales.find((s) => s === valor);
+
+    if (coincidencia && valor.includes(" - ")) {
+      const soloNombre = valor.split(" - ")[0];
+      e.target.value = soloNombre;
+    }
+  };
+
   const confirmarGuardar = () => {
     guardarPartido(
       state,
@@ -345,12 +325,15 @@ export default function Home() {
               value={state.goleadorRivalNombre}
               onChange={handleChange}
               list="sugerencias-goleadores-rivales"
+              onInput={handleInputSeleccionado}
               className="w-1/2 border rounded p-2"
             />
             <datalist id="sugerencias-goleadores-rivales">
-              {sugerenciasGoleadoresRivales.map((nombre, i) => (
-                <option key={i} value={nombre} />
-              ))}
+              {sugerenciasGoleadoresRivales
+                .filter((nombre) => nombre.includes(state.rival))
+                .map((nombre, index) => (
+                  <option key={index} value={nombre} />
+                ))}
             </datalist>
 
             <input

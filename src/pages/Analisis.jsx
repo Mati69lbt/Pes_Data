@@ -1,4 +1,4 @@
-//cspell: ignore Campeonatos Desglozados Analisis Andrada Comparacion Resumenes Rossi Unicos Vacio anio resumenes rossi supercopa 
+//cspell: ignore Campeonatos Desglozados Analisis Andrada Comparacion Resumenes Rossi Unicos Vacio anio resumenes rossi supercopa segun
 
 import { useEffect, useState } from "react";
 
@@ -80,14 +80,20 @@ export default function Analisis() {
 
   const renderFila = (resumen) => {
     const r = resumen || resumenVacio();
+    const color = getColorSegunResultado(r);
+
+    const celda = (valor) => (
+      <td className={`border px-2 text-center w-10 ${color}`}>{valor}</td>
+    );
+
     return (
       <>
-        <td className="border px-2 text-center w-10">{r.pj}</td>
-        <td className="border px-2 text-center w-10">{r.g}</td>
-        <td className="border px-2 text-center w-10">{r.e}</td>
-        <td className="border px-2 text-center w-10">{r.p}</td>
-        <td className="border px-2 text-center w-10">{r.gf}</td>
-        <td className="border px-2 text-center w-10">{r.gc}</td>
+        {celda(r.pj)}
+        {celda(r.g)}
+        {celda(r.e)}
+        {celda(r.p)}
+        {celda(r.gf)}
+        {celda(r.gc)}
       </>
     );
   };
@@ -110,7 +116,7 @@ export default function Analisis() {
           {torneo}
         </h3>
         <table className="text-[10px] md:text-xs lg:text-sm border mx-auto w-full max-w-5xl">
-          <thead className="bg-green-200">
+          <thead className="bg-blue-200 text-black font-semibold">
             <tr>
               <th className="border px-2 text-right">Rossi</th>
               <th className="border px-2">Pj</th>
@@ -171,6 +177,14 @@ export default function Analisis() {
   const totalesRossi = obtenerTotales(resumenesRossi);
   const totalesAndrada = obtenerTotales(resumenesAndrada);
 
+  function getColorSegunResultado({ g = 0, e = 0, p = 0 }) {
+    if (g > p) return "bg-green-100";
+    if (p > g) return "bg-red-100";
+    if (e >= g && e >= p) return "bg-yellow-100";
+    if (g === p) return "bg-yellow-100";
+    return "bg-gray-100";
+  }
+
   return (
     <div className="p-4 max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold text-center mb-4">
@@ -183,17 +197,17 @@ export default function Analisis() {
           Totales Generales
         </h2>
         <table className="text-[10px] md:text-xs lg:text-sm border mx-auto w-full max-w-5xl">
-          <thead className="">
+          <thead className="bg-blue-200 text-black font-semibold">
             <tr>
-              <th className="border px-2 text-center bg-green-200" colSpan={7}>
+              <th className="border px-2 text-center bg-blue-200" colSpan={7}>
                 Rossi
               </th>
               <th className="px-2 bg-white"></th>
-              <th className="border px-2 text-center bg-green-200" colSpan={7}>
+              <th className="border px-2 text-center bg-blue-200" colSpan={7}>
                 Andrada
               </th>
             </tr>
-            <tr className="bg-green-200">
+            <tr className="bg-blue-200">
               <th className="border px-2 text-right">Tipo</th>
               <th className="border px-2 text-center">Pj</th>
               <th className="border px-2 text-center">G</th>

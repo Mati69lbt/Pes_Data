@@ -1,4 +1,4 @@
-// cspell: ignore equiposTitulares suplentesDisponibles Buffarini Almendra Chicco Lamardo Balerdi Heredia Rossi Andrada Abila rossi Peruzzi Izquierdoz Goltz Olaza Seba Barrios Reynoso Cardona Zárate Vergini Magallán Fabra Nández P Pérez Villa Pavón Tévez Benedetto andrada
+// cspell: ignore equiposTitulares suplentesDisponibles Buffarini Almendra Chicco Lamardo Balerdi Heredia Rossi Andrada Abila rossi Peruzzi Izquierdoz Goltz Olaza Seba Barrios Reynoso Cardona Zarate Vergini Magallán Fabra Nandez P Pérez Villa Pavón Tevez Benedetto Wanchope andrada
 export const suplentesDisponibles = [
   "Mas",
   "Buffarini",
@@ -18,11 +18,11 @@ export const equiposTitulares = {
     "Vergini",
     "Magallán",
     "Fabra",
-    "Nández",
+    "Nandez",
     "P.Pérez",
     "Villa",
     "Pavón",
-    "Tévez",
+    "Tevez",
     "Benedetto",
   ],
   andrada: [
@@ -35,7 +35,7 @@ export const equiposTitulares = {
     "Barrios",
     "Reynoso",
     "Cardona",
-    "Zárate",
-    "Abila",
+    "Zarate",
+    "Wanchope",
   ],
 };

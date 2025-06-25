@@ -1,3 +1,4 @@
+// cspell: ignore goleadoresxcampeonato Anio
 import { useEffect, useState } from "react";
 
 export default function Palmares() {
@@ -10,11 +11,24 @@ export default function Palmares() {
 
   if (campeonatosGanados.length === 0) {
     return (
-      <div className="p-4 text-center text-gray-500">
-        No se ha marcado ningún campeonato como ganado.
+      <div className="p-4 max-w-xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4 text-center">🏆 Palmares</h1>
+        <div className="text-center text-gray-500">
+          No se ha marcado ningún campeonato como ganado.
+        </div>
+        <footer className="mt-8 text-xs text-gray-500 text-center border-t pt-4">
+          <p>Versión 5.0.0</p>
+          <p>Última actualización: junio 2025</p>
+          <p>Datos almacenados localmente (localStorage)</p>
+          <p className="italic">
+            Esta es una versión beta. Los datos podrían perderse al borrar la
+            caché del navegador.
+          </p>
+        </footer>
       </div>
     );
   }
+  
 
   return (
     <div className="p-4 max-w-xl mx-auto">
@@ -35,6 +49,15 @@ export default function Palmares() {
             </li>
           ))}
       </ul>
+      <footer className="mt-8 text-xs text-gray-500 text-center border-t pt-4">
+        <p>Versión 5.0.0</p>
+        <p>Última actualización: junio 2025</p>
+        <p>Datos almacenados localmente (localStorage)</p>
+        <p className="italic">
+          Esta es una versión beta. Los datos podrían perderse al borrar la
+          caché del navegador.
+        </p>
+      </footer>
     </div>
   );
 }

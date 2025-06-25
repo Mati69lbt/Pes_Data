@@ -1,4 +1,4 @@
-//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion Anio Desglozados anio supercopa
+//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion Anio Desglozados anio supercopa segun
 import { useEffect, useState } from "react";
 
 export default function CampeonatosDesglozados() {
@@ -38,11 +38,20 @@ export default function CampeonatosDesglozados() {
         fecha.getMonth() + 1 >= 7
           ? fecha.getFullYear()
           : fecha.getFullYear() - 1;
-      const torneoKey =
-        torneo.toLowerCase().includes("libertadores") ||
-        torneo.toLowerCase().includes("supercopa")
-          ? `${torneo} ${fecha.getFullYear()}`
-          : `${torneo} ${anio}-${anio + 1}`;
+   
+
+      const torneoNombre = torneo.toLowerCase();
+      const copasAnuales = [
+        "libertadores",
+        "supercopa",
+        "copa argentina",
+        "mundial",
+      ];
+      const esCopaAnual = copasAnuales.some((t) => torneoNombre.includes(t));
+
+      const torneoKey = esCopaAnual
+        ? `${torneo} ${fecha.getFullYear()}`
+        : `${torneo} ${anio}-${anio + 1}`;
 
       if (!agrupado[torneoKey]) {
         agrupado[torneoKey] = [];
@@ -97,6 +106,17 @@ export default function CampeonatosDesglozados() {
     return `🥇 ${g}G - ${e}E - ${p}P\n📊${pj}PJ - ${gf}GF - ${gc}GC`;
   }
 
+  function getColorSegunResultado(stats) {
+    const { g = 0, e = 0, p = 0 } = stats;
+
+    if (g > e && g > p) return "bg-green-100";
+    if (e > g && e > p) return "bg-yellow-100";
+    if (g == p) return "bg-yellow-100";
+    if (p > g && p > e) return "bg-red-100";
+
+    return "";
+  }
+
   return (
     <div className="p-4 max-w-screen-2xl mx-auto">
       {Object.entries(resumenesPorCampeonato)
@@ -127,7 +147,7 @@ export default function CampeonatosDesglozados() {
 
               <div className="max-h-[70vh] overflow-auto border rounded">
                 <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-                  <thead className="bg-green-200 sticky top-[-1px]  shadow-lg">
+                  <thead className="bg-blue-200 sticky top-[-1px]  shadow-lg">
                     <tr>
                       <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                         Rival
@@ -151,28 +171,63 @@ export default function CampeonatosDesglozados() {
                   <tbody>
                     {Object.entries(resumenPorRivales)
                       .sort(([a], [b]) => a.localeCompare(b))
-                      .map(([rival, stats]) => (
-                        <tr key={rival}>
-                          <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[50px]">
-                            {rival}
-                          </td>
-                          <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                            {formatearResumen(stats.general)}
-                          </td>
-                          <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                            {formatearResumen(stats.local)}
-                          </td>
-                          <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                            {formatearResumen(stats.visitante)}
-                          </td>
-                          <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                            {formatearResumen(stats.rossi)}
-                          </td>
-                          <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
-                            {formatearResumen(stats.andrada)}
-                          </td>
-                        </tr>
-                      ))}
+                      .map(([rival, stats], index) => {
+                        const rowBg =
+                          index % 2 === 0 ? "bg-white" : "bg-gray-200";
+
+                        return (
+                          <tr key={rival} className={rowBg}>
+                            <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[50px]">
+                              {rival}
+                            </td>
+                            <td
+                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                stats.general.pj > 0
+                                  ? getColorSegunResultado(stats.general)
+                                  : rowBg
+                              }`}
+                            >
+                              {formatearResumen(stats.general)}
+                            </td>
+                            <td
+                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                stats.local.pj > 0
+                                  ? getColorSegunResultado(stats.local)
+                                  : rowBg
+                              }`}
+                            >
+                              {formatearResumen(stats.local)}
+                            </td>
+                            <td
+                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                stats.visitante.pj > 0
+                                  ? getColorSegunResultado(stats.visitante)
+                                  : rowBg
+                              }`}
+                            >
+                              {formatearResumen(stats.visitante)}
+                            </td>
+                            <td
+                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                stats.rossi.pj > 0
+                                  ? getColorSegunResultado(stats.rossi)
+                                  : rowBg
+                              }`}
+                            >
+                              {formatearResumen(stats.rossi)}
+                            </td>
+                            <td
+                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                stats.andrada.pj > 0
+                                  ? getColorSegunResultado(stats.andrada)
+                                  : rowBg
+                              }`}
+                            >
+                              {formatearResumen(stats.andrada)}
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>

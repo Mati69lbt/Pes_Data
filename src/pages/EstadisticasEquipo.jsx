@@ -1,4 +1,4 @@
-//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion
+//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion segun resultado
 import { useEffect, useState } from "react";
 
 export default function EstadisticasEquipo() {
@@ -78,6 +78,17 @@ export default function EstadisticasEquipo() {
     setEstadisticas(sorted);
   };
 
+  function getColorSegunResultado(stats) {
+    const { g = 0, e = 0, p = 0 } = stats;
+
+    if (g > e && g > p) return "bg-green-100";
+    if (e > g && e > p) return "bg-yellow-100";
+    if (g == p) return "bg-yellow-100";
+    if (p > g && p > e) return "bg-red-100";
+
+    return ""; 
+  }
+
   return (
     <div className="p-4 max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">
@@ -132,7 +143,7 @@ export default function EstadisticasEquipo() {
 
       <div className="max-h-[70vh] overflow-auto border rounded">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-green-200 sticky top-[-1px] shadow-lg">
+          <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
             <tr>
               <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                 Rival
@@ -158,19 +169,49 @@ export default function EstadisticasEquipo() {
                   <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[65px]">
                     {rival}
                   </td>
-                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                  <td
+                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                      stats.general.pj > 0
+                        ? getColorSegunResultado(stats.general)
+                        : rowBg
+                    }`}
+                  >
                     {formatearResumen(stats.general)}
                   </td>
-                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                  <td
+                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                      stats.local.pj > 0
+                        ? getColorSegunResultado(stats.local)
+                        : rowBg
+                    }`}
+                  >
                     {formatearResumen(stats.local)}
                   </td>
-                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                  <td
+                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                      stats.visitante.pj > 0
+                        ? getColorSegunResultado(stats.visitante)
+                        : rowBg
+                    }`}
+                  >
                     {formatearResumen(stats.visitante)}
                   </td>
-                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                  <td
+                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                      stats.rossi.pj > 0
+                        ? getColorSegunResultado(stats.rossi)
+                        : rowBg
+                    }`}
+                  >
                     {formatearResumen(stats.rossi)}
                   </td>
-                  <td className="border px-2 py-1 whitespace-pre-line text-left align-top">
+                  <td
+                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                      stats.andrada.pj > 0
+                        ? getColorSegunResultado(stats.andrada)
+                        : rowBg
+                    }`}
+                  >
                     {formatearResumen(stats.andrada)}
                   </td>
                 </tr>
