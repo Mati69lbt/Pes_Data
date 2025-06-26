@@ -10,6 +10,7 @@ import GoleadoresPorCampeonato from "./pages/GoleadoresPorCampeonato.jsx";
 import Villanos from "./pages/Villanos.jsx";
 import Palmares from "./pages/Palmares.jsx";
 import Landing from "./pages/Landing.jsx";
+import Editar from "./pages/Editar.jsx";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/campeonatos" element={<EstadisticasPorCampeonato />} />
           <Route path="/analisis" element={<Analisis />} />
           <Route path="/goleadores" element={<GoleadoresEquipo />} />
+          <Route path="/editar/:id" element={<Editar />} />
           <Route
             path="/goleadoresxcampeonato"
             element={<GoleadoresPorCampeonato />}

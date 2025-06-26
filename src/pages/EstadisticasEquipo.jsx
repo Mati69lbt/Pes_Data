@@ -78,16 +78,18 @@ export default function EstadisticasEquipo() {
     setEstadisticas(sorted);
   };
 
-  function getColorSegunResultado(stats) {
-    const { g = 0, e = 0, p = 0 } = stats;
+ function getColorSegunResultado(stats) {
+   const { g = 0, e = 0, p = 0 } = stats;
 
-    if (g > e && g > p) return "bg-green-100";
-    if (e > g && e > p) return "bg-yellow-100";
-    if (g == p) return "bg-yellow-100";
-    if (p > g && p > e) return "bg-red-100";
+   if (g >= e && g > p) return "bg-green-100"; 
+   if (p >= g && p > e) return "bg-red-100"; 
+   if (g === p && g > e) return "bg-yellow-100"; 
+   if (g === e && g === p) return "bg-yellow-100"; 
+   if (e >= g && e >= p) return "bg-yellow-100";
 
-    return ""; 
-  }
+   return "bg-pink-100"; 
+ }
+
 
   return (
     <div className="p-4 max-w-7xl mx-auto">

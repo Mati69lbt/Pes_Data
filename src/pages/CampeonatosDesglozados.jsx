@@ -1,7 +1,9 @@
 //cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion Anio Desglozados anio supercopa segun
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CampeonatosDesglozados() {
+  const navigate = useNavigate();
   const [partidos, setPartidos] = useState([]);
   const [resumenesPorCampeonato, setResumenesPorCampeonato] = useState({});
 
@@ -38,7 +40,6 @@ export default function CampeonatosDesglozados() {
         fecha.getMonth() + 1 >= 7
           ? fecha.getFullYear()
           : fecha.getFullYear() - 1;
-   
 
       const torneoNombre = torneo.toLowerCase();
       const copasAnuales = [
@@ -109,12 +110,13 @@ export default function CampeonatosDesglozados() {
   function getColorSegunResultado(stats) {
     const { g = 0, e = 0, p = 0 } = stats;
 
-    if (g > e && g > p) return "bg-green-100";
-    if (e > g && e > p) return "bg-yellow-100";
-    if (g == p) return "bg-yellow-100";
-    if (p > g && p > e) return "bg-red-100";
+    if (g >= e && g > p) return "bg-green-100";
+    if (p >= g && p > e) return "bg-red-100";
+    if (g === p && g > e) return "bg-yellow-100";
+    if (g === e && g === p) return "bg-yellow-100";
+    if (e >= g && e >= p) return "bg-yellow-100";
 
-    return "";
+    return "bg-pink-100";
   }
 
   return (
@@ -179,6 +181,24 @@ export default function CampeonatosDesglozados() {
                           <tr key={rival} className={rowBg}>
                             <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[50px]">
                               {rival}
+                              <button
+                                type="button"
+                                className="ml-2 text-xs text-blue-600 hover:underline cursor-pointer"
+                                onClick={() => {
+                                  const partidoId = lista.find(
+                                    (p) => p.rival === rival
+                                  )?.id;
+                                  console.log(
+                                    "ID encontrado para editar:",
+                                    partidoId
+                                  );
+                                  if (partidoId)
+                                    navigate(`/editar/${partidoId}`);
+                                }}
+                                title="Editar partido"
+                              >
+                                ✏️
+                              </button>
                             </td>
                             <td
                               className={`border px-2 py-1 whitespace-pre-line text-left align-top ${

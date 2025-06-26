@@ -178,10 +178,11 @@ export default function Analisis() {
   const totalesAndrada = obtenerTotales(resumenesAndrada);
 
   function getColorSegunResultado({ g = 0, e = 0, p = 0 }) {
-    if (g > p) return "bg-green-100";
-    if (p > g) return "bg-red-100";
+    if (g >= e && g > p) return "bg-green-100";
+    if (p >= g && p > e) return "bg-red-100";
+    if (g === p && g > e) return "bg-yellow-100";
+    if (g === e && g === p) return "bg-yellow-100";
     if (e >= g && e >= p) return "bg-yellow-100";
-    if (g === p) return "bg-yellow-100";
     return "bg-gray-100";
   }
 
