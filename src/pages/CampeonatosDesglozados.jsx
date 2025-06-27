@@ -181,25 +181,34 @@ export default function CampeonatosDesglozados() {
                           <tr key={rival} className={rowBg}>
                             <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[50px]">
                               {rival}
-                              <button
-                                type="button"
-                                className="ml-2 text-xs text-blue-600 hover:underline cursor-pointer"
-                                onClick={() => {
-                                  const partidoId = lista.find(
-                                    (p) => p.rival === rival
-                                  )?.id;
-                                  console.log(
-                                    "ID encontrado para editar:",
-                                    partidoId
-                                  );
-                                  if (partidoId)
-                                    navigate(`/editar/${partidoId}`);
-                                }}
-                                title="Editar partido"
-                              >
-                                ✏️
-                              </button>
+                              <div className="mt-1">
+                                <select
+                                  onChange={(e) => {
+                                    const partidoId = e.target.value;
+                                    if (partidoId)
+                                      navigate(`/editar/${partidoId}`);
+                                  }}
+                                  defaultValue=""
+                                  className="text-xs border rounded px-1 py-0.5 bg-white hover:bg-gray-50"
+                                  style={{ maxWidth: "110px" }}
+                                  title="Editar partido"
+                                >
+                                  <option value="">Editar...</option>
+                                  {lista
+                                    .filter((p) => p.rival === rival)
+                                    .sort(
+                                      (a, b) =>
+                                        new Date(b.fecha) - new Date(a.fecha)
+                                    )
+                                    .map((p) => (
+                                      <option key={p.id} value={p.id}>
+                                        {p.fecha}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
                             </td>
+
                             <td
                               className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
                                 stats.general.pj > 0
