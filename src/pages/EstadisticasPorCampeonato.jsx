@@ -104,7 +104,7 @@ export default function EstadisticasPorCampeonato() {
   function getColorSegunResultado(stats) {
     const { g = 0, e = 0, p = 0 } = stats;
     if (g >= e && g > p) return "bg-green-100";
-    if (p >= g && p > e) return "bg-red-100";
+    if (p > g && p >= e) return "bg-red-100";
     if (g === p && g > e) return "bg-yellow-100";
     if (g === e && g === p) return "bg-yellow-100";
     if (e >= g && e >= p) return "bg-yellow-100";

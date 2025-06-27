@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { initialState, partidoReducer } from "../context/partidoReducer";
@@ -20,9 +20,13 @@ const Editar = () => {
   const [sugerenciasGoleadoresBoca] = useAutoCompleteList("goleadoresBoca");
   const [sugerenciasJugadoresBoca] = useAutoCompleteList("jugadoresBoca");
 
+  const cargado = useRef(false);
   useEffect(() => {
+    if (cargado.current) return;
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partido = (storage.partidos || []).find((p) => String(p.id) === id);
+
+    console.log("useEffect se ejecutó");
 
     if (partido) {
       dispatch({ type: "SET_FECHA", payload: partido.fecha });
@@ -53,6 +57,7 @@ const Editar = () => {
         ),
       });
     }
+    cargado.current = true;
   }, [id]);
 
   const agregarGoleador = () => {
@@ -94,7 +99,6 @@ const Editar = () => {
       payload: { nombre, goles, etiqueta },
     });
   };
-  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -394,7 +398,16 @@ const Editar = () => {
         >
           Guardar partido
         </button>
-      </form>                
+
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 rounded mt-2"
+        >
+          Volver
+        </button>
+        
+      </form>
     </div>
   );
 };

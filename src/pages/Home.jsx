@@ -331,9 +331,13 @@ export default function Home() {
             <datalist id="sugerencias-goleadores-rivales">
               {sugerenciasGoleadoresRivales
                 .filter((nombre) => nombre.includes(state.rival))
-                .map((nombre, index) => (
-                  <option key={index} value={nombre} />
-                ))}
+                .map(
+                  (nombre, index) => (
+                    console.log(`Sugerencia rival: ${nombre}`),
+                    console.log(`Rival actual: ${state.rival}`),
+                    (<option key={index} value={nombre} />)
+                  )
+                )}
             </datalist>
 
             <input
