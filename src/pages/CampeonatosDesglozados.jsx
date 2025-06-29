@@ -4,32 +4,24 @@ import { useNavigate } from "react-router-dom";
 
 export default function CampeonatosDesglozados() {
   const navigate = useNavigate();
-  const [partidos, setPartidos] = useState([]);
   const [resumenesPorCampeonato, setResumenesPorCampeonato] = useState({});
 
-  const [campeonatosGanados, setCampeonatosGanados] = useState(() => {
+  const [resultadosPorTorneo, setResultadosPorTorneo] = useState(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
-    return new Set(storage.campeonatosGanados || []);
+    return storage.campeonatosResultados || {};
   });
 
-  const toggleCampeonatoGanado = (torneo) => {
-    const updated = new Set(campeonatosGanados);
-    if (updated.has(torneo)) {
-      updated.delete(torneo);
-    } else {
-      updated.add(torneo);
-    }
-
+  const setResultadoTorneo = (torneo, resultado) => {
+    const updated = { ...resultadosPorTorneo, [torneo]: resultado };
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
-    storage.campeonatosGanados = Array.from(updated);
+    storage.campeonatosResultados = updated;
     localStorage.setItem("pesData", JSON.stringify(storage));
-    setCampeonatosGanados(updated);
+    setResultadosPorTorneo(updated);
   };
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const lista = storage.partidos || [];
-    setPartidos(lista);
 
     const agrupado = {};
 
@@ -107,6 +99,56 @@ export default function CampeonatosDesglozados() {
     return `🥇 ${g}G - ${e}E - ${p}P\n📊${pj}PJ - ${gf}GF - ${gc}GC`;
   }
 
+  function opcionesPorTorneo(torneo) {
+    const nombre = torneo.toLowerCase();
+    if (nombre.includes("liga") || nombre.includes("campeonato")) {
+      return [
+        "Campeón",
+        "Sub Campeón",
+        "3°",
+        "4°",
+        "5°",
+        "6°",
+        "7°",
+        "8°",
+        "9°",
+        "10°",
+        "11°",
+        "12°",
+        "13°",
+        "14°",
+        "15°",
+        "16°",
+        "17°",
+        "18°",
+        "19°",
+        "20°",
+        "21°",
+        "22°",
+        "23°",
+        "24°",
+        "25°",
+      ];
+    }
+    if (nombre.includes("copa argentina") || nombre.includes("libertadores")) {
+      return [
+        "Fase de grupos",
+        "Octavos de final",
+        "Cuartos de final",
+        "Semifinal",
+        "Subcampeón",
+        "Campeón",
+      ];
+    }
+    if (nombre.includes("supercopa")) {
+      return ["Subcampeón", "Campeón"];
+    }
+    if (nombre.includes("mundial")) {
+      return ["Semifinal", "Subcampeón", "Campeón"];
+    }
+    return ["Participación"];
+  }
+
   function getColorSegunResultado(stats) {
     const { g = 0, e = 0, p = 0 } = stats;
 
@@ -126,32 +168,43 @@ export default function CampeonatosDesglozados() {
           const extraerAnio = (str) => {
             const match = str.match(/(\d{4})(?:-(\d{4}))?$/);
             if (!match) return 0;
-            return parseInt(match[2] || match[1]); // Si es temporada, toma el año de fin
+            return parseInt(match[2] || match[1]);
           };
-          return extraerAnio(b) - extraerAnio(a); // Más recientes primero
+          return extraerAnio(b) - extraerAnio(a);
         })
         .map(([torneo, lista]) => {
           const resumenPorRivales = generarResumenPorRivales(lista);
 
           return (
             <div key={torneo} className="mb-8">
-              <div className="flex justify-center items-center gap-2 mb-1">
-                <h2 className="text-xl font-semibold mb-2 text-center underline">
+              <div className="flex flex-wrap justify-center items-center gap-3 mb-2">
+                <h2 className="text-xl font-semibold text-center underline">
                   {torneo}
                 </h2>
-                <label className="text-sm">🏆 ¿Campeón?</label>
-                <input
-                  type="checkbox"
-                  checked={campeonatosGanados.has(torneo)}
-                  onChange={() => toggleCampeonatoGanado(torneo)}
-                />
+                <div className="flex items-center gap-1">
+                  <label className="text-sm md:text-base text-gray-700 font-medium flex items-center">
+                    <span className="mr-1">🏅</span> Resultado:
+                  </label>
+                  <select
+                    value={resultadosPorTorneo[torneo] || ""}
+                    onChange={(e) => setResultadoTorneo(torneo, e.target.value)}
+                    className="text-sm md:text-base border border-gray-300 rounded-md px-2 py-1 bg-white hover:border-blue-400 hover:shadow focus:outline-none focus:ring focus:border-blue-500 transition duration-150"
+                  >
+                    <option value="">-- Seleccionar --</option>
+                    {opcionesPorTorneo(torneo).map((opcion) => (
+                      <option key={opcion} value={opcion}>
+                        {opcion}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="max-h-[70vh] overflow-auto border rounded">
                 <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-                  <thead className="bg-blue-200 sticky top-[-1px]  shadow-lg">
+                  <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
                     <tr>
-                      <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
+                      <th className="border px-2 py-1 w-[50px] break-words text-center font-bold">
                         Rival
                       </th>
                       {[
@@ -209,51 +262,24 @@ export default function CampeonatosDesglozados() {
                               </div>
                             </td>
 
-                            <td
-                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
-                                stats.general.pj > 0
-                                  ? getColorSegunResultado(stats.general)
-                                  : rowBg
-                              }`}
-                            >
-                              {formatearResumen(stats.general)}
-                            </td>
-                            <td
-                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
-                                stats.local.pj > 0
-                                  ? getColorSegunResultado(stats.local)
-                                  : rowBg
-                              }`}
-                            >
-                              {formatearResumen(stats.local)}
-                            </td>
-                            <td
-                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
-                                stats.visitante.pj > 0
-                                  ? getColorSegunResultado(stats.visitante)
-                                  : rowBg
-                              }`}
-                            >
-                              {formatearResumen(stats.visitante)}
-                            </td>
-                            <td
-                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
-                                stats.rossi.pj > 0
-                                  ? getColorSegunResultado(stats.rossi)
-                                  : rowBg
-                              }`}
-                            >
-                              {formatearResumen(stats.rossi)}
-                            </td>
-                            <td
-                              className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
-                                stats.andrada.pj > 0
-                                  ? getColorSegunResultado(stats.andrada)
-                                  : rowBg
-                              }`}
-                            >
-                              {formatearResumen(stats.andrada)}
-                            </td>
+                            {[
+                              "general",
+                              "local",
+                              "visitante",
+                              "rossi",
+                              "andrada",
+                            ].map((key) => (
+                              <td
+                                key={key}
+                                className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                                  stats[key].pj > 0
+                                    ? getColorSegunResultado(stats[key])
+                                    : rowBg
+                                }`}
+                              >
+                                {formatearResumen(stats[key])}
+                              </td>
+                            ))}
                           </tr>
                         );
                       })}
