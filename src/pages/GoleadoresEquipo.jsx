@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 export default function GoleadoresEquipo() {
   const [resumenes, setResumenes] = useState({});
   const [ordenAmbito, setOrdenAmbito] = useState("general");
-  const [ordenCampo, setOrdenCampo] = useState("nombre");
-  const [ordenDireccion, setOrdenDireccion] = useState("asc");
+  const [ordenCampo, setOrdenCampo] = useState("goles");
+  const [ordenDireccion, setOrdenDireccion] = useState("desc");
   const [estadisticas, setEstadisticas] = useState([]);
 
   const handleOrdenar = () => {
@@ -89,8 +89,7 @@ export default function GoleadoresEquipo() {
     setResumenes(resumen);
   }, []);
 
-  const promedio = (goles, pj) => (pj > 0 ? (goles / pj).toFixed(2) : "0.00");
-
+  
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">
