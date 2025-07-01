@@ -81,10 +81,24 @@ export default function Analisis() {
   const renderFila = (resumen) => {
     const r = resumen || resumenVacio();
     const color = getColorSegunResultado(r);
+    const diferenciaGol = r.gf - r.gc;
 
     const celda = (valor) => (
       <td className={`border px-2 text-center w-10 ${color}`}>{valor}</td>
     );
+
+    const celdaDiferencia = (valor) => {
+      let bg = "";
+      if (valor > 0) bg = "bg-green-200";
+      else if (valor < 0) bg = "bg-red-200";
+      else bg = "bg-yellow-200";
+
+      return (
+        <td className={`border px-2 text-center w-10 font-semibold ${bg}`}>
+          {valor}
+        </td>
+      );
+    };
 
     return (
       <>
@@ -94,9 +108,11 @@ export default function Analisis() {
         {celda(r.p)}
         {celda(r.gf)}
         {celda(r.gc)}
+        {celdaDiferencia(diferenciaGol)}
       </>
     );
   };
+  
 
   const renderComparacion = (torneo) => {
     const r = resumenesRossi[torneo] || {
@@ -125,6 +141,7 @@ export default function Analisis() {
               <th className="border px-2">P</th>
               <th className="border px-2">GF</th>
               <th className="border px-2">GC</th>
+              <th className="border px-2">Dif</th>
               <th className="border px-2 bg-white"></th>
               <th className="border px-2 text-right">Andrada</th>
               <th className="border px-2">Pj</th>
@@ -133,6 +150,7 @@ export default function Analisis() {
               <th className="border px-2">P</th>
               <th className="border px-2">GF</th>
               <th className="border px-2">GC</th>
+              <th className="border px-2">Dif</th>
             </tr>
           </thead>
           <tbody>
@@ -200,11 +218,11 @@ export default function Analisis() {
         <table className="text-[10px] md:text-xs lg:text-sm border mx-auto w-full max-w-5xl">
           <thead className="bg-blue-200 text-black font-semibold">
             <tr>
-              <th className="border px-2 text-center bg-blue-200" colSpan={7}>
+              <th className="border px-2 text-center bg-blue-200" colSpan={8}>
                 Rossi
               </th>
               <th className="px-2 bg-white"></th>
-              <th className="border px-2 text-center bg-blue-200" colSpan={7}>
+              <th className="border px-2 text-center bg-blue-200" colSpan={8}>
                 Andrada
               </th>
             </tr>
@@ -216,6 +234,7 @@ export default function Analisis() {
               <th className="border px-2 text-center">P</th>
               <th className="border px-2 text-center">GF</th>
               <th className="border px-2 text-center">GC</th>
+              <th className="border px-2 text-center">DIF</th>
               <th className="px-2 bg-white"></th>
               <th className="border px-2 text-right">Tipo</th>
               <th className="border px-2 text-center">Pj</th>
@@ -224,6 +243,7 @@ export default function Analisis() {
               <th className="border px-2 text-center">P</th>
               <th className="border px-2 text-center">GF</th>
               <th className="border px-2 text-center">GC</th>
+              <th className="border px-2 text-center">DIF</th>
             </tr>
           </thead>
           <tbody>
