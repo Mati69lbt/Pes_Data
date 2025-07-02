@@ -11,8 +11,24 @@ export default function GoleadoresPorCampeonato() {
 
     partidos.forEach((partido) => {
       const { torneo, fecha, goleadores = [], jugadores = [] } = partido;
-      const year = new Date(fecha).getFullYear();
-      const key = `${torneo} ${year}`;
+      const torneoNombre = torneo?.toLowerCase() || "sin torneo";
+      const fechaObj = new Date(fecha);
+      const anio =
+        fechaObj.getMonth() + 1 >= 7
+          ? fechaObj.getFullYear()
+          : fechaObj.getFullYear() - 1;
+
+      const copasAnuales = [
+        "libertadores",
+        "supercopa",
+        "copa argentina",
+        "mundial",
+      ];
+      const esCopaAnual = copasAnuales.some((t) => torneoNombre.includes(t));
+
+      const key = esCopaAnual
+        ? `${torneo} ${fechaObj.getFullYear()}`
+        : `${torneo} ${anio}-${anio + 1}`;
 
       if (!resumen[key]) resumen[key] = {};
 
@@ -35,8 +51,28 @@ export default function GoleadoresPorCampeonato() {
     // Contar PJ solo para jugadores que hicieron goles
     partidos.forEach((partido) => {
       const { torneo, fecha, jugadores = [], goleadores = [] } = partido;
-      const year = new Date(fecha).getFullYear();
-      const key = `${torneo} ${year}`;
+
+      // 🔄 CAMBIO: misma lógica de clave que arriba
+      const torneoNombre = torneo?.toLowerCase() || "sin torneo";
+      const fechaObj = new Date(fecha);
+      const anio =
+        fechaObj.getMonth() + 1 >= 7
+          ? fechaObj.getFullYear()
+          : fechaObj.getFullYear() - 1;
+
+      const copasAnuales = [
+        "libertadores",
+        "supercopa",
+        "copa argentina",
+        "mundial",
+      ];
+      const esCopaAnual = copasAnuales.some((t) => torneoNombre.includes(t));
+
+      const key = esCopaAnual
+        ? `${torneo} ${fechaObj.getFullYear()}`
+        : `${torneo} ${anio}-${anio + 1}`;
+      // 🔄 FIN CAMBIO
+
       const goleadoresNombres = goleadores.map((g) => g.nombre);
 
       jugadores.forEach((jugador) => {
