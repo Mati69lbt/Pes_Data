@@ -1,4 +1,4 @@
-//cspell: ignore goleadores Ambito Andrada Direccion Estadisticas Resumenes Rossi andrada estadisticas resumenes rossi seccion Anio Desglozados anio supercopa segun
+// cspell: ignore Andrada Anio Desglozados Resumenes Rossi Segun andrada anio opcion resumenes rossi seccion supercopa 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -149,17 +149,15 @@ export default function CampeonatosDesglozados() {
     return ["Participación"];
   }
 
-  function getColorSegunResultado(stats) {
-    const { g = 0, e = 0, p = 0 } = stats;
-
-    if (g >= e && g > p) return "bg-green-100";
-    if (p > g && p >= e) return "bg-red-100";
-    if (g === p && g > e) return "bg-yellow-100";
-    if (g === e && g === p) return "bg-yellow-100";
-    if (e >= g && e >= p) return "bg-yellow-100";
-
-    return "bg-pink-100";
-  }
+    function getColorSegunResultado(stats) {
+      const { g = 0, e = 0, p = 0 } = stats;
+      if (g >= e && g > p) return "bg-green-100";
+      if (p > g && p >= e) return "bg-red-100";
+      if (g === p && g > e) return "bg-yellow-100";
+      if (g === e && g === p) return "bg-yellow-100";
+      if (e >= g && e >= p) return "bg-yellow-100";
+      return "bg-pink-100";
+    }
 
   return (
     <div className="p-4 max-w-screen-2xl mx-auto">
@@ -173,6 +171,139 @@ export default function CampeonatosDesglozados() {
           return extraerAnio(b) - extraerAnio(a);
         })
         .map(([torneo, lista]) => {
+          const torneoNombre = torneo.toLowerCase();
+
+          // Torneos con tabla especial
+          if (
+            torneoNombre.includes("campeonato argentino") ||
+            torneoNombre.includes("supercopa argentina") ||
+            torneoNombre.includes("mundial de clubes")
+          ) {
+            return (
+              <div key={torneo} className="mb-8">
+                <div className="flex flex-wrap justify-center items-center gap-3 mb-2">
+                  <h2 className="text-xl font-semibold text-center underline">
+                    {torneo}
+                  </h2>
+                  <div className="flex items-center gap-1">
+                    <label className="text-sm md:text-base text-gray-700 font-medium flex items-center">
+                      <span className="mr-1">🏅</span> Resultado:
+                    </label>
+                    <select
+                      value={resultadosPorTorneo[torneo] || ""}
+                      onChange={(e) =>
+                        setResultadoTorneo(torneo, e.target.value)
+                      }
+                      className="text-sm md:text-base border border-gray-300 rounded-md px-2 py-1 bg-white hover:border-blue-400 hover:shadow focus:outline-none focus:ring focus:border-blue-500 transition duration-150"
+                    >
+                      <option value="">-- Seleccionar --</option>
+                      {opcionesPorTorneo(torneo).map((opcion) => (
+                        <option key={opcion} value={opcion}>
+                          {opcion}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="max-h-[70vh] overflow-auto border rounded">
+                  <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
+                    <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
+                      <tr>
+                        <th className="border px-2 py-1 text-left w-1/4">
+                          Rival
+                        </th>
+                        <th className="border px-2 py-1 text-center w-1/12">
+                          Resultado
+                        </th>
+                        <th className="border px-2 py-1 text-center w-1/12">
+                          Condición
+                        </th>
+                        <th className="border px-2 py-1 text-center w-1/12">
+                          Equipo
+                        </th>
+                        <th className="border px-2 py-1 text-left w-2/5">
+                          Goleadores
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {lista
+                        .sort((a, b) => a.rival.localeCompare(b.rival))
+                        .map((p, index) => {
+                          const resultado =
+                            p.golesFavor > p.golesContra
+                              ? "g"
+                              : p.golesFavor === p.golesContra
+                              ? "e"
+                              : "p";
+                          const bgColor =
+                            resultado === "g"
+                              ? "bg-green-100"
+                              : resultado === "e"
+                              ? "bg-yellow-100"
+                              : "bg-red-100";
+
+                          return (
+                            <tr
+                              key={p.id}
+                              className={
+                                index % 2 === 0 ? "bg-white" : "bg-gray-200"
+                              }
+                            >
+                              <td className="border px-2 py-1 flex justify-between items-center">
+                                {p.rival.trim()}
+                                <select
+                                  onChange={(e) => {
+                                    const partidoId = e.target.value;
+                                    if (partidoId)
+                                      navigate(`/editar/${partidoId}`);
+                                  }}
+                                  defaultValue=""
+                                  className="text-xs border rounded px-1 py-0.5 bg-white hover:bg-gray-50 ml-2"
+                                  title="Editar partido"
+                                >
+                                  <option value="">Editar...</option>
+                                  <option value={p.id}>{p.fecha}</option>
+                                </select>
+                              </td>
+                              <td
+                                className={`border px-2 py-1 text-center ${bgColor}`}
+                              >
+                                {p.golesFavor} - {p.golesContra}
+                              </td>
+                              <td className="border px-2 py-1 text-center">
+                                {p.esLocal ? "Local" : "Visitante"}
+                              </td>
+                              <td className="border px-2 py-1 text-center">
+                                {p.equipo.charAt(0).toUpperCase() +
+                                  p.equipo.slice(1).toLowerCase()}
+                              </td>
+                              <td className="border px-2 py-1">
+                                {p.goleadores?.length
+                                  ? p.goleadores
+                                      .map((g) =>
+                                        g.etiqueta &&
+                                        g.etiqueta.toLowerCase() !== "x1"
+                                          ? `${g.nombre} (${g.etiqueta})`
+                                          : g.nombre
+                                      )
+                                      .join(", ")
+                                  : "-"}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          }
+          
+
+          // Tabla resumen por rival (Copa Argentina, Libertadores, etc.)
           const resumenPorRivales = generarResumenPorRivales(lista);
 
           return (
@@ -199,7 +330,6 @@ export default function CampeonatosDesglozados() {
                   </select>
                 </div>
               </div>
-
               <div className="max-h-[70vh] overflow-auto border rounded">
                 <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
                   <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
@@ -229,7 +359,6 @@ export default function CampeonatosDesglozados() {
                       .map(([rival, stats], index) => {
                         const rowBg =
                           index % 2 === 0 ? "bg-white" : "bg-gray-200";
-
                         return (
                           <tr key={rival} className={rowBg}>
                             <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[50px]">
@@ -261,7 +390,6 @@ export default function CampeonatosDesglozados() {
                                 </select>
                               </div>
                             </td>
-
                             {[
                               "general",
                               "local",
