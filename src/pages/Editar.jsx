@@ -26,7 +26,7 @@ const Editar = () => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partido = (storage.partidos || []).find((p) => String(p.id) === id);
 
-    console.log("useEffect se ejecutó");
+    
 
     if (partido) {
       dispatch({ type: "SET_FECHA", payload: partido.fecha });

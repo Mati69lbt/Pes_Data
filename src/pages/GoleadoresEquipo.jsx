@@ -49,9 +49,7 @@ export default function GoleadoresEquipo() {
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partidos = Array.isArray(storage.partidos) ? storage.partidos : [];
-    const resumen = {};
-
-    console.log("Partidos cargados:", partidos);
+    const resumen = {};   
 
     partidos.forEach((partido) => {
       const ambitos = ["general"];

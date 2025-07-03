@@ -332,9 +332,7 @@ export default function Home() {
               {sugerenciasGoleadoresRivales
                 .filter((nombre) => nombre.includes(state.rival))
                 .map(
-                  (nombre, index) => (
-                    console.log(`Sugerencia rival: ${nombre}`),
-                    console.log(`Rival actual: ${state.rival}`),
+                  (nombre, index) => (               
                     (<option key={index} value={nombre} />)
                   )
                 )}
