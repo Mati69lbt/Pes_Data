@@ -14,7 +14,7 @@ function FooterInfo() {
   };
   return (
     <footer className="mt-8 text-xs text-gray-500 text-center border-t pt-4">
-      <p>Versión 5.0.8</p>
+      <p>Versión 5.5.1</p>
       <p>Última actualización: junio 2025</p>
       <p>Datos almacenados localmente (localStorage)</p>
       <p className="italic">

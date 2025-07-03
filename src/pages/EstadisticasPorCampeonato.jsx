@@ -155,252 +155,256 @@ export default function EstadisticasPorCampeonato() {
       </h1>
 
       <div className="max-h-[70vh] overflow-auto border rounded">
-  <div className="min-w-full">
-    <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-      <thead className="bg-blue-200 text-black font-semibold sticky top-0 shadow-lg">
-        {/* tus <tr> de encabezados */}
-            <tr>
-              <th className="border px-2 py-1 text-center">Campeonato</th>
-              <th className="border px-2 py-1 text-center">PJ</th>
-              <th className="border px-2 py-1 text-center">G</th>
-              <th className="border px-2 py-1 text-center">E</th>
-              <th className="border px-2 py-1 text-center">P</th>
-              <th className="border px-2 py-1 text-center">GF</th>
-              <th className="border px-2 py-1 text-center">GC</th>
-              <th className="border px-2 py-1 text-center">DG</th>
-              {/* Nuevas columnas */}
-              <th className="border px-2 py-1 text-center">PJ L</th>
-              <th className="border px-2 py-1 text-center">G L</th>
-              <th className="border px-2 py-1 text-center">E L</th>
-              <th className="border px-2 py-1 text-center">P L</th>
-              <th className="border px-2 py-1 text-center">GF L</th>
-              <th className="border px-2 py-1 text-center">GC L</th>
-              <th className="border px-2 py-1 text-center">DG L</th>
+        <div className="min-w-full">
+          <table className="border mx-auto text-xs md:text-sm w-full">
+            <thead className="bg-blue-200 text-black font-semibold sticky top-0 shadow-lg">
+              {/* tus <tr> de encabezados */}
+              <tr>
+                <th className="border px-2 py-1 text-center">Campeonato</th>
+                <th className="border px-2 py-1 text-center">PJ</th>
+                <th className="border px-2 py-1 text-center">G</th>
+                <th className="border px-2 py-1 text-center">E</th>
+                <th className="border px-2 py-1 text-center">P</th>
+                <th className="border px-2 py-1 text-center">GF</th>
+                <th className="border px-2 py-1 text-center">GC</th>
+                <th className="border px-2 py-1 text-center">DG</th>
+                {/* Nuevas columnas */}
+                <th className="border px-2 py-1 text-center">PJ L</th>
+                <th className="border px-2 py-1 text-center">G L</th>
+                <th className="border px-2 py-1 text-center">E L</th>
+                <th className="border px-2 py-1 text-center">P L</th>
+                <th className="border px-2 py-1 text-center">GF L</th>
+                <th className="border px-2 py-1 text-center">GC L</th>
+                <th className="border px-2 py-1 text-center">DG L</th>
 
-              <th className="border px-2 py-1 text-center">PJ V</th>
-              <th className="border px-2 py-1 text-center">G V</th>
-              <th className="border px-2 py-1 text-center">E V</th>
-              <th className="border px-2 py-1 text-center">P V</th>
-              <th className="border px-2 py-1 text-center">GF V</th>
-              <th className="border px-2 py-1 text-center">GC V</th>
-              <th className="border px-2 py-1 text-center">DG V</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clavesOrdenadas.map((clave, index) => {
-              const resumen = resumenes[clave];
-              const rowBg = index % 2 === 0 ? "bg-white" : "bg-gray-200";
+                <th className="border px-2 py-1 text-center">PJ V</th>
+                <th className="border px-2 py-1 text-center">G V</th>
+                <th className="border px-2 py-1 text-center">E V</th>
+                <th className="border px-2 py-1 text-center">P V</th>
+                <th className="border px-2 py-1 text-center">GF V</th>
+                <th className="border px-2 py-1 text-center">GC V</th>
+                <th className="border px-2 py-1 text-center">DG V</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clavesOrdenadas.map((clave, index) => {
+                const resumen = resumenes[clave];
+                const rowBg = index % 2 === 0 ? "bg-white" : "bg-gray-200";
 
-              const colorGeneral = getColorSegunResultado(resumen.general);
-              const colorLocal = getColorSegunResultado(resumen.local);
-              const colorVisitante = getColorSegunResultado(resumen.visitante);
+                const colorGeneral = getColorSegunResultado(resumen.general);
+                const colorLocal = getColorSegunResultado(resumen.local);
+                const colorVisitante = getColorSegunResultado(
+                  resumen.visitante
+                );
 
-              const dg = resumen.general.gf - resumen.general.gc;
-              const dgLocal = resumen.local.gf - resumen.local.gc;
-              const dgVisitante = resumen.visitante.gf - resumen.visitante.gc;
+                const dg = resumen.general.gf - resumen.general.gc;
+                const dgLocal = resumen.local.gf - resumen.local.gc;
+                const dgVisitante = resumen.visitante.gf - resumen.visitante.gc;
 
-              const calcularPuntos = (b) => {
-                const puntos = b.g * 3 + b.e;
-                const posibles = b.pj * 3;
-                const efectividad =
-                  posibles > 0 ? (puntos / posibles).toFixed(2) : "0";
-                return { puntos, efectividad };
-              };
-              return (
-                <>
-                  <tr key={clave} className={rowBg}>
-                    <td
-                      className="border px-2 py-1 font-semibold text-center align-middle"
-                      rowSpan="3"
-                    >
-                      {normalizarNombre(clave)}
-                    </td>
-
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.pj}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.g}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.e}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.p}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.gf}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorGeneral}`}
-                    >
-                      {resumen.general.gc}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
-                        dg
-                      )}`}
-                    >
-                      {dg}
-                    </td>
-                    {/* Local */}
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.pj}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.g}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.e}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.p}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.gf}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorLocal}`}
-                    >
-                      {resumen.local.gc}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
-                        dgLocal
-                      )}`}
-                    >
-                      {dgLocal}
-                    </td>
-                    {/* Visitante */}
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.pj}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.g}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.e}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.p}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.gf}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${colorVisitante}`}
-                    >
-                      {resumen.visitante.gc}
-                    </td>
-                    <td
-                      className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
-                        dgVisitante
-                      )}`}
-                    >
-                      {dgVisitante}
-                    </td>
-                  </tr>
-                  {/* Nueva fila de rótulos */}
-                  <tr className="bg-blue-200 text-[11px] md:text-sm lg:text-base font-semibold">
-                    <td className="border px-2 py-1 text-right"></td>
-                    {[
-                      "PG",
-                      "EF",
-                      "PL",
-                      "EF",
-                      "PV",
-                      "EF",
-                      "RG",
-                      "EF",
-                      "RL",
-                      "EF",
-                      "RV",
-                      "EF",
-                      "AG",
-                      "EF",
-                      "AL",
-                      "EF",
-                      "AV",
-                      "EF",
-                    ].map((rotulo) => (
+                const calcularPuntos = (b) => {
+                  const puntos = b.g * 3 + b.e;
+                  const posibles = b.pj * 3;
+                  const efectividad =
+                    posibles > 0 ? (puntos / posibles).toFixed(1) : "0";
+                  return { puntos, efectividad };
+                };
+                return (
+                  <>
+                    <tr key={clave} className={rowBg}>
                       <td
-                        key={`${clave}-rotulo-${rotulo}`}
-                        className="border px-2 py-1 text-center"
+                        className="border px-2 py-1 font-semibold text-center align-middle"
+                        rowSpan="3"
                       >
-                        {rotulo}
+                        {normalizarNombre(clave)}
                       </td>
-                    ))}
-                  </tr>
 
-                  {/* Nueva fila de valores */}
-                  <tr className="bg-gray-100 text-[11px] md:text-sm lg:text-base">
-                    <td className="border px-2 py-1 text-right font-semibold"></td>
-                    {[
-                      resumen.general,
-                      resumen.local,
-                      resumen.visitante,
-                      resumen.rossiGeneral || { g: 0, e: 0, pj: 0 },
-                      resumen.rossiLocal || { g: 0, e: 0, pj: 0 },
-                      resumen.rossiVisitante || { g: 0, e: 0, pj: 0 },
-                      resumen.andradaGeneral || { g: 0, e: 0, pj: 0 },
-                      resumen.andradaLocal || { g: 0, e: 0, pj: 0 },
-                      resumen.andradaVisitante || { g: 0, e: 0, pj: 0 },
-                    ].flatMap((bloque) => {
-                      const { puntos, efectividad } = calcularPuntos(bloque);
-                      return [
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.pj}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.g}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.e}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.p}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.gf}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorGeneral}`}
+                      >
+                        {resumen.general.gc}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
+                          dg
+                        )}`}
+                      >
+                        {dg}
+                      </td>
+                      {/* Local */}
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.pj}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.g}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.e}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.p}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.gf}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorLocal}`}
+                      >
+                        {resumen.local.gc}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
+                          dgLocal
+                        )}`}
+                      >
+                        {dgLocal}
+                      </td>
+                      {/* Visitante */}
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.pj}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.g}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.e}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.p}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.gf}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${colorVisitante}`}
+                      >
+                        {resumen.visitante.gc}
+                      </td>
+                      <td
+                        className={`border px-2 py-1 text-center ${getColorSegunDiferenciaDeGol(
+                          dgVisitante
+                        )}`}
+                      >
+                        {dgVisitante}
+                      </td>
+                    </tr>
+                    
+                    {/* Nueva fila de rótulos */}
+                    <tr className="bg-blue-200 text-[11px] md:text-sm lg:text-base font-semibold">
+                      <td className="border px-2 py-1 text-right"></td>
+                      {[
+                        "PG",
+                        "EF",
+                        "PL",
+                        "EF",
+                        "PV",
+                        "EF",
+                        "RG",
+                        "EF",
+                        "RL",
+                        "EF",
+                        "RV",
+                        "EF",
+                        "AG",
+                        "EF",
+                        "AL",
+                        "EF",
+                        "AV",
+                        "EF",
+                      ].map((rotulo) => (
                         <td
-                          key={`${clave}-${Math.random()}-p`}
+                          key={`${clave}-rotulo-${rotulo}`}
                           className="border px-2 py-1 text-center"
                         >
-                          {puntos}
-                        </td>,
-                        <td
-                          key={`${clave}-${Math.random()}-e`}
-                          className={`border px-2 py-1 text-center ${getColorEfectividad(
-                            efectividad
-                          )}`}
-                        >
-                          {efectividad}
-                        </td>,
-                      ];
-                    })}
-                  </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                          {rotulo}
+                        </td>
+                      ))}
+                    </tr>
+
+                    {/* Nueva fila de valores */}
+                    <tr className="bg-gray-100 text-[11px] md:text-sm lg:text-base">
+                      <td className="border px-2 py-1 text-right font-semibold"></td>
+                      {[
+                        resumen.general,
+                        resumen.local,
+                        resumen.visitante,
+                        resumen.rossiGeneral || { g: 0, e: 0, pj: 0 },
+                        resumen.rossiLocal || { g: 0, e: 0, pj: 0 },
+                        resumen.rossiVisitante || { g: 0, e: 0, pj: 0 },
+                        resumen.andradaGeneral || { g: 0, e: 0, pj: 0 },
+                        resumen.andradaLocal || { g: 0, e: 0, pj: 0 },
+                        resumen.andradaVisitante || { g: 0, e: 0, pj: 0 },
+                      ].flatMap((bloque) => {
+                        const { puntos, efectividad } = calcularPuntos(bloque);
+                        return [
+                          <td
+                            key={`${clave}-${Math.random()}-p`}
+                            className="border px-2 py-1 text-center"
+                          >
+                            {puntos}
+                          </td>,
+                          <td
+                            key={`${clave}-${Math.random()}-e`}
+                            className={`border px-2 py-1 text-center ${getColorEfectividad(
+                              efectividad
+                            )}`}
+                          >
+                            {efectividad}
+                          </td>,
+                        ];
+                      })}
+                    </tr>
+                    
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <CampeonatosDesglozados />
