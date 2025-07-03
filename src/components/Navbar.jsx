@@ -61,9 +61,10 @@ export default function Navbar() {
   const links = [
     { path: "/", label: "🏠 Inicio" },
     { path: "/equipo", label: "📊 Equipo" },
-    { path: "/campeonatos", label: "🏆 Campeonatos" },
+    { path: "/campeonatos", label: "🏆 Camp" },
     { path: "/analisis", label: "📈 Análisis" },
-    { path: "/goleadores", label: "⚽ Goleadores" },
+    { path: "/Temporadas", label: "🗓️ Temp" },
+    { path: "/goleadores", label: "⚽ Gol" },
     { path: "/goleadoresxcampeonato", label: "⚽ GxC" },
     { path: "/villanos", label: "😈 Villanos" },
     { path: "/palmares", label: "👑 Palmares" },

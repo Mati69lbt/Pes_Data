@@ -11,6 +11,7 @@ import Villanos from "./pages/Villanos.jsx";
 import Palmares from "./pages/Palmares.jsx";
 import Landing from "./pages/Landing.jsx";
 import Editar from "./pages/Editar.jsx";
+import EstadisticasPorTemporada from "./pages/Temporadas.jsx";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/analisis" element={<Analisis />} />
           <Route path="/goleadores" element={<GoleadoresEquipo />} />
           <Route path="/editar/:id" element={<Editar />} />
+          <Route path="/temporadas" element={<EstadisticasPorTemporada />} />
           <Route
             path="/goleadoresxcampeonato"
             element={<GoleadoresPorCampeonato />}
