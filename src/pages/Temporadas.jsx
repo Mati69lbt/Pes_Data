@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 export default function EstadisticasPorTemporada() {
   const [resumenes, setResumenes] = useState({});
   const [topGoleadores, setTopGoleadores] = useState([]);
+  const [goleadoresPorTemporada, setGoleadoresPorTemporada] = useState({});
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partidos = storage.partidos || [];
 
     const resumen = {};
-    const contadorGoles = new Map();
+    const goleadoresPorTemporada = {};
 
     const obtenerTemporada = (fechaStr) => {
       const fecha = new Date(fechaStr);
@@ -49,6 +50,10 @@ export default function EstadisticasPorTemporada() {
         };
       }
 
+      if (!goleadoresPorTemporada[temporada]) {
+        goleadoresPorTemporada[temporada] = new Map();
+      }
+
       const resultado = gf > gc ? "g" : gf === gc ? "e" : "p";
 
       const actualizar = (bloque) => {
@@ -76,34 +81,34 @@ export default function EstadisticasPorTemporada() {
         }
       }
 
-      // Goleadores
+      // Goleadores por temporada
       (p.goleadores || []).forEach((g) => {
         const nombre = g.nombre;
         const cantidad = g.goles || 1;
-        if (!contadorGoles.has(nombre)) {
-          contadorGoles.set(nombre, 0);
-        }
-        contadorGoles.set(nombre, contadorGoles.get(nombre) + cantidad);
+        const mapa = goleadoresPorTemporada[temporada];
+
+        mapa.set(nombre, (mapa.get(nombre) || 0) + cantidad);
       });
     });
 
+    // Calcular diferencia de gol
     for (const temp of Object.keys(resumen)) {
       for (const key of Object.keys(resumen[temp])) {
         resumen[temp][key].df = resumen[temp][key].gf - resumen[temp][key].gc;
       }
     }
 
+    // Transformar mapas de goleadores a arrays top 7
+    const goleadoresOrdenados = {};
+    for (const [temp, mapa] of Object.entries(goleadoresPorTemporada)) {
+      goleadoresOrdenados[temp] = Array.from(mapa.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 7)
+        .map(([nombre, goles]) => ({ nombre, goles }));
+    }
+
     setResumenes(resumen);
-
-    const top = Array.from(contadorGoles.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 7)
-      .map(([nombre, goles]) => ({
-        nombre,
-        goles,
-      }));
-
-    setTopGoleadores(top);
+    setTopGoleadores(goleadoresOrdenados);
   }, []);
 
   const temporadasOrdenadas = Object.keys(resumenes).sort((a, b) => {
@@ -259,17 +264,17 @@ export default function EstadisticasPorTemporada() {
                 {renderMetricas(temp, "andrada")}
               </tr>
             </tbody>
-          </table>
-
+          </table>      
           {/* Goleadores */}
           <h2 className="text-sm font-semibold mt-4 mb-1 text-center">
             ⚽ Goleadores
           </h2>
-          {topGoleadores.length > 0 ? (
+
+          {(topGoleadores[temp] || []).length > 0 ? (
             <table className="border mx-auto text-xs md:text-sm w-full">
               <tbody>
                 <tr>
-                  {topGoleadores.map((g, idx) => (
+                  {topGoleadores[temp].map((g, idx) => (
                     <React.Fragment key={g.nombre}>
                       <td className="border px-2 py-1 text-center font-semibold bg-slate-100">
                         {idx + 1}º
@@ -285,7 +290,7 @@ export default function EstadisticasPorTemporada() {
                   ))}
                 </tr>
                 <tr>
-                  {topGoleadores.map((g) => (
+                  {topGoleadores[temp].map((g) => (
                     <React.Fragment key={g.nombre}>
                       <td
                         colSpan={2}
