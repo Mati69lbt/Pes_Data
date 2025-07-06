@@ -233,7 +233,7 @@ export default function EstadisticasPorTemporada() {
 
   return (
     <div className="p-4 max-w-screen-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">
+      <h1 className="text-2xl font-bold mb-6 text-center ">
         📊 Estadísticas por Temporada
       </h1>
 

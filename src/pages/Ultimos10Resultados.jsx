@@ -38,15 +38,17 @@ const Ultimos10Resultados = ({ partidos }) => {
 
   return (
     <>
-      <div className="grid grid-cols-3 items-center gap-2 mb-2 ml-12">
+      <div className="grid grid-cols-2 items-center gap-2 mb-2 ml-12">
         <h2 className="font-semibold text-sm whitespace-nowrap col-start-1">
           📈 Últimos 10 Resultados (General)
         </h2>
-        <div className="flex gap-1 flex-wrap col-start-2">
+        <div className="flex gap-1 flex-wrap col-start-2 -ml-20">
           {ultimos10General.map((p) => (
             <div
               key={p.id}
-              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(p)}`}
+              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(
+                p
+              )}`}
               title={`${p.fecha} vs ${p.rival.trim()}: ${p.golesFavor}-${
                 p.golesContra
               }`}
@@ -55,15 +57,17 @@ const Ultimos10Resultados = ({ partidos }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 items-center gap-2 mb-2 mt-4 ml-12">
+      <div className="grid grid-cols-2 items-center gap-2 mb-2 mt-4 ml-12">
         <h2 className="font-semibold text-sm whitespace-nowrap col-start-1">
           🧤 Últimos 10 con Rossi
         </h2>
-        <div className="flex gap-1 flex-wrap col-start-2">
+        <div className="flex gap-1 flex-wrap col-start-2 -ml-20">
           {ultimos10Rossi.map((p) => (
             <div
               key={p.id}
-              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(p)}`}
+              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(
+                p
+              )}`}
               title={`${p.fecha} vs ${p.rival.trim()}: ${p.golesFavor}-${
                 p.golesContra
               }`}
@@ -72,15 +76,17 @@ const Ultimos10Resultados = ({ partidos }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 items-center gap-2 mb-2 mt-4 ml-12">
+      <div className="grid grid-cols-2 items-center gap-2 mb-2 mt-4 ml-12">
         <h2 className="font-semibold text-sm whitespace-nowrap col-start-1">
           🧤 Últimos 10 con Andrada
         </h2>
-        <div className="flex gap-1 flex-wrap col-start-2">
+        <div className="flex gap-1 flex-wrap col-start-2 -ml-20">
           {ultimos10Andrada.map((p) => (
             <div
               key={p.id}
-              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(p)}`}
+              className={`w-5 h-5 md:w-6 md:h-6 rounded-full  ${colorResultado(
+                p
+              )}`}
               title={`${p.fecha} vs ${p.rival.trim()}: ${p.golesFavor}-${
                 p.golesContra
               }`}
