@@ -1,14 +1,17 @@
 // cspell: ignore Andrada Estadistica Estadisticas Metricas Resumenes Rossi Segun andrada anio resumenes rossi
 import React, { useEffect, useState } from "react";
+import Ultimos10Resultados from "./Ultimos10Resultados";
 
 export default function EstadisticasPorTemporada() {
   const [resumenes, setResumenes] = useState({});
   const [topGoleadores, setTopGoleadores] = useState([]);
   const [goleadoresPorTemporada, setGoleadoresPorTemporada] = useState({});
+  const [ult10partidos, setUlt10partidos] = useState([])
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem("pesData") || "{}");
     const partidos = storage.partidos || [];
+    setUlt10partidos(partidos);
 
     const resumen = {};
     const goleadoresPorTemporada = {};
@@ -234,6 +237,8 @@ export default function EstadisticasPorTemporada() {
         📊 Estadísticas por Temporada
       </h1>
 
+      <Ultimos10Resultados partidos={ult10partidos} />
+
       {temporadasOrdenadas.map((temp) => (
         <div key={temp} className="mb-8 border rounded shadow">
           <table className="border mx-auto text-xs md:text-sm w-full">
@@ -264,7 +269,7 @@ export default function EstadisticasPorTemporada() {
                 {renderMetricas(temp, "andrada")}
               </tr>
             </tbody>
-          </table>      
+          </table>
           {/* Goleadores */}
           <h2 className="text-sm font-semibold mt-4 mb-1 text-center">
             ⚽ Goleadores
