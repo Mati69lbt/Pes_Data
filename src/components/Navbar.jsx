@@ -118,7 +118,7 @@ export default function Navbar() {
           onClick={() => setMenuAbierto(false)}
         >
           <div
-            className="bg-white w-full h-full p-6 shadow-lg flex flex-col items-end"
+            className="bg-white w-full h-full p-6 shadow-lg flex flex-col items-end overflow-y-auto max-h-screen"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-6 text-xl font-bold text-blue-600 flex items-center gap-2 w-full justify-end">
@@ -139,9 +139,8 @@ export default function Navbar() {
                   to={path}
                   className={`${linkClass(
                     path
-                  )} flex items-center gap-1 mb-2 text-right`}
+                  )} flex items-center gap-1 text-right w-full`}
                   onClick={() => setMenuAbierto(false)}
-                  style={{ width: "100%" }}
                 >
                   {label}
                 </Link>
@@ -151,8 +150,7 @@ export default function Navbar() {
                   setMenuAbierto(false);
                   mostrarConfirmacionReset();
                 }}
-                className="text-red-600 hover:underline flex items-center gap-1 mt-4 text-right"
-                style={{ width: "100%" }}
+                className="text-red-600 hover:underline flex items-center gap-1 mt-4 text-right w-full"
               >
                 🗑️ Reiniciar
               </button>

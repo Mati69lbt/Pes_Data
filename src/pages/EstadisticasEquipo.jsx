@@ -98,7 +98,7 @@ export default function EstadisticasEquipo() {
         📊 Estadísticas del Equipo
       </h1>
 
-      <div className="flex flex-wrap gap-4 mb-6 items-end  justify-center">
+      <div className="flex flex-wrap gap-4 mb-2 items-end  justify-center">
         <div className="text-center">
           <label className="text-sm font-medium block">Ámbito</label>
           <select
@@ -144,9 +144,9 @@ export default function EstadisticasEquipo() {
         </div>
       </div>
 
-      <div className="max-h-[70vh] overflow-auto border rounded">
+      <div className="max-h-[80vh] overflow-auto border rounded">
         <table className="text-[11px] md:text-sm lg:text-base border mx-auto min-w-[700px] md:min-w-full">
-          <thead className="bg-blue-200 sticky top-[-1px] shadow-lg">
+          <thead className="bg-blue-200 sticky top-0 shadow-lg">
             <tr>
               <th className="border px-2 py-1  w-[50px] break-words text-x text-center font-bold ">
                 Rival
