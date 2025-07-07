@@ -70,9 +70,24 @@ export default function Analisis() {
       resumen[torneoKey][campo].gc += golesContra;
     });
 
-    const torneosOrdenados = Array.from(torneosSet).sort((a, b) =>
-      b.localeCompare(a)
-    );
+    const torneosOrdenados = Array.from(torneosSet).sort((a, b) => {
+      // Extraer año del string
+      const extraerAnio = (torneo) => {
+        const partes = torneo.trim().split(" ");
+        const ult = partes[partes.length - 1];
+        if (ult.includes("-")) {
+          // Ej: 2022-2023
+          return parseInt(ult.split("-")[1]);
+        }
+        return parseInt(ult);
+      };
+
+      const anioA = extraerAnio(a);
+      const anioB = extraerAnio(b);
+
+      return anioB - anioA;
+    });
+    
     setTorneosUnicos(torneosOrdenados);
     setResumenesRossi(resumenRossi);
     setResumenesAndrada(resumenAndrada);
