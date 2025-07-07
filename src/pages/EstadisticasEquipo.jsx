@@ -60,7 +60,9 @@ export default function EstadisticasEquipo() {
 
   const formatearResumen = ({ pj, g, e, p, gf, gc }) => {
     if (pj === 0) return "";
-    return `🥇 ${g}G - ${e}E - ${p}P\n📊 ${pj}PJ - ${gf}GF - ${gc}GC`;
+    return `🏆 ${g}Ga - ❌ ${p}Pe
+📊 ${pj}PJ - 🤝 ${e}Em
+😄 ${gf}GF - 😢 ${gc}GC`;
   };
 
   const handleOrdenar = () => {
@@ -78,18 +80,17 @@ export default function EstadisticasEquipo() {
     setEstadisticas(sorted);
   };
 
- function getColorSegunResultado(stats) {
-   const { g = 0, e = 0, p = 0 } = stats;
+  function getColorSegunResultado(stats) {
+    const { g = 0, e = 0, p = 0 } = stats;
 
-   if (g >= e && g > p) return "bg-green-100";
-   if (p > g && p >= e) return "bg-red-100";
-   if (g === p && g > e) return "bg-yellow-100";
-   if (g === e && g === p) return "bg-yellow-100";
-   if (e >= g && e >= p) return "bg-yellow-100";
+    if (g >= e && g > p) return "bg-green-100";
+    if (p > g && p >= e) return "bg-red-100";
+    if (g === p && g > e) return "bg-yellow-100";
+    if (g === e && g === p) return "bg-yellow-100";
+    if (e >= g && e >= p) return "bg-yellow-100";
 
-   return "bg-pink-100"; 
- }
-
+    return "bg-pink-100";
+  }
 
   return (
     <div className="p-4 max-w-7xl mx-auto">
@@ -168,11 +169,11 @@ export default function EstadisticasEquipo() {
 
               return (
                 <tr key={rival} className={rowBg}>
-                  <td className="border px-2 py-1 font-semibold text-left align-top break-words w-[65px]">
+                  <td className="border px-2 py-1 font-semibold text-left align-center break-words w-[65px]">
                     {rival}
                   </td>
                   <td
-                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                    className={`border px-2 py-1 whitespace-pre-line text-center align-top ${
                       stats.general.pj > 0
                         ? getColorSegunResultado(stats.general)
                         : rowBg
@@ -181,7 +182,7 @@ export default function EstadisticasEquipo() {
                     {formatearResumen(stats.general)}
                   </td>
                   <td
-                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                    className={`border px-2 py-1 whitespace-pre-line text-center align-top ${
                       stats.local.pj > 0
                         ? getColorSegunResultado(stats.local)
                         : rowBg
@@ -190,7 +191,7 @@ export default function EstadisticasEquipo() {
                     {formatearResumen(stats.local)}
                   </td>
                   <td
-                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                    className={`border px-2 py-1 whitespace-pre-line text-center align-top ${
                       stats.visitante.pj > 0
                         ? getColorSegunResultado(stats.visitante)
                         : rowBg
@@ -199,7 +200,7 @@ export default function EstadisticasEquipo() {
                     {formatearResumen(stats.visitante)}
                   </td>
                   <td
-                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                    className={`border px-2 py-1 whitespace-pre-line text-center align-top ${
                       stats.rossi.pj > 0
                         ? getColorSegunResultado(stats.rossi)
                         : rowBg
@@ -208,7 +209,7 @@ export default function EstadisticasEquipo() {
                     {formatearResumen(stats.rossi)}
                   </td>
                   <td
-                    className={`border px-2 py-1 whitespace-pre-line text-left align-top ${
+                    className={`border px-2 py-1 whitespace-pre-line text-center align-top ${
                       stats.andrada.pj > 0
                         ? getColorSegunResultado(stats.andrada)
                         : rowBg
