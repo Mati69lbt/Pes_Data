@@ -72,69 +72,92 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow-md w-full sticky top-0 z-10">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <span className="text-xl font-bold text-blue-600 whitespace-nowrap">
-          ⚽ pesData
-        </span>
-
-        {/* LINKS EN ESCRITORIO SOLO SI NO SE FUERZA EL MENÚ HAMBURGUESA */}
-        <div
-          className={`space-x-2 text-sm ${
-            forzarHamburguesa ? "hidden" : "hidden md:flex"
-          }`}
-        >
-          {links.map(({ path, label }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`${linkClass(path)} flex items-center gap-1`}
+      {/* Solo mostrar la barra principal si NO está forzado el hamburguesa */}
+      {!forzarHamburguesa && (
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <span className="text-xl font-bold text-blue-600 whitespace-nowrap">
+            ⚽ pesData
+          </span>
+          <div className="space-x-2 text-sm flex">
+            {links.map(({ path, label }) => (
+              <Link
+                key={path}
+                to={path}
+                className={`${linkClass(path)} flex items-center gap-1`}
+              >
+                {label}
+              </Link>
+            ))}
+            <button
+              onClick={mostrarConfirmacionReset}
+              className="text-red-600 hover:underline flex items-center gap-1"
             >
-              {label}
-            </Link>
-          ))}
-          <button
-            onClick={mostrarConfirmacionReset}
-            className="text-red-600 hover:underline flex items-center gap-1"
-          >
-            🗑️ Reiniciar
-          </button>
+              🗑️ Reiniciar
+            </button>
+          </div>
         </div>
+      )}
 
-        {/* BOTÓN HAMBURGUESA SI SE FUERZA */}
-        {forzarHamburguesa && (
-          <button
-            type="button"
-            className="text-gray-700 text-2xl"
-            onClick={() => setMenuAbierto(!menuAbierto)}
-            aria-label="Toggle menu"
-          >
-            ☰
-          </button>
-        )}
-      </div>
+      {/* En móvil SOLO mostrar el botón hamburguesa */}
+      {forzarHamburguesa && (
+        <button
+          type="button"
+          className="fixed top-3 right-3 bg-white rounded-full shadow-md p-2 text-gray-700 text-2xl z-20"
+          onClick={() => setMenuAbierto(!menuAbierto)}
+          aria-label="Abrir menú"
+          style={{ minWidth: "48px", minHeight: "48px" }}
+        >
+          ☰
+        </button>
+      )}
 
-      {/* MENÚ DESPLEGABLE SI ESTÁ ABIERTO */}
+      {/* MENÚ DESPLEGABLE */}
       {menuAbierto && forzarHamburguesa && (
-        <div className="px-4 pb-4 space-y-1 bg-white shadow-inner text-sm">
-          {links.map(({ path, label }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`${linkClass(path)} flex items-center gap-1`}
-              onClick={() => setMenuAbierto(false)}
-            >
-              {label}
-            </Link>
-          ))}
-          <button
-            onClick={() => {
-              setMenuAbierto(false);
-              mostrarConfirmacionReset();
-            }}
-            className="text-red-600 hover:underline flex items-center gap-1"
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 flex"
+          onClick={() => setMenuAbierto(false)}
+        >
+          <div
+            className="bg-white w-full h-full p-6 shadow-lg flex flex-col items-end"
+            onClick={(e) => e.stopPropagation()}
           >
-            🗑️ Reiniciar
-          </button>
+            <div className="mb-6 text-xl font-bold text-blue-600 flex items-center gap-2 w-full justify-end">
+              ⚽ pesData
+              <button
+                className="ml-2 text-gray-400 text-2xl"
+                onClick={() => setMenuAbierto(false)}
+                aria-label="Cerrar menú"
+                tabIndex={0}
+              >
+                ×
+              </button>
+            </div>
+            <div className="flex flex-col gap-2 w-full items-end">
+              {links.map(({ path, label }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  className={`${linkClass(
+                    path
+                  )} flex items-center gap-1 mb-2 text-right`}
+                  onClick={() => setMenuAbierto(false)}
+                  style={{ width: "100%" }}
+                >
+                  {label}
+                </Link>
+              ))}
+              <button
+                onClick={() => {
+                  setMenuAbierto(false);
+                  mostrarConfirmacionReset();
+                }}
+                className="text-red-600 hover:underline flex items-center gap-1 mt-4 text-right"
+                style={{ width: "100%" }}
+              >
+                🗑️ Reiniciar
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </nav>
